@@ -1,0 +1,5 @@
+<h2>Editar Categoria</h2>
+<form action="/categorias/<%= categoria.id %>/editar" method="post">
+  <label>Nome: <input type="text" name="nome" value="<%= categoria.nome %>" required></label><br>
+  <button type="submit">Salvar</button>
+</form>

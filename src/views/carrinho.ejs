@@ -1,0 +1,27 @@
+<h2>Carrinho de Compras</h2>
+<% if (mensagem) { %>
+  <p style="color:green"><%= mensagem %></p>
+<% } %>
+<table>
+  <tr><th>Produto</th><th>Preço</th><th>Desconto</th><th>Quantidade</th><th>Subtotal</th><th>Ações</th></tr>
+  <% itens.forEach(item => { %>
+    <tr>
+      <td><%= item.produto.nome %></td>
+      <td>R$ <%= item.produto.preco.toFixed(2) %></td>
+      <td><%= item.produto.desconto %> %</td>
+      <td><%= item.quantidade %></td>
+      <td>R$ <%= (item.produto.preco * item.quantidade * (1 - item.produto.desconto/100)).toFixed(2) %></td>
+      <td>
+        <form action="/carrinho/remover/<%= item.produto.id %>" method="post" style="display:inline;">
+          <button type="submit">Remover</button>
+        </form>
+      </td>
+    </tr>
+  <% }) %>
+</table>
+<p><strong>Total: R$ <%= total.toFixed(2) %></strong></p>
+<% if (itens.length > 0) { %>
+  <form action="/carrinho/finalizar" method="post">
+    <button type="submit">Finalizar Compra</button>
+  </form>
+<% } %>
