@@ -13,8 +13,13 @@ exports.formNovoUsuario = (req, res) => {
 exports.criarUsuario = async (req, res) => {
   const { nome, email, senha, tipo } = req.body;
   const hash = await bcrypt.hash(senha, 10);
-  await Usuario.create({ nome, email, senha: hash, tipo });
-  res.redirect('/usuarios');
+  const novoUsuario = await Usuario.create({ nome, email, senha: hash, tipo });
+  // Login automático após cadastro
+  req.session.usuarioId = novoUsuario.id;
+  req.session.tipo = novoUsuario.tipo;
+  req.session.nome = novoUsuario.nome;
+  req.session.email = novoUsuario.email;
+  res.redirect('/');
 };
 
 exports.formEditarUsuario = async (req, res) => {
@@ -29,6 +34,14 @@ exports.editarUsuario = async (req, res) => {
 };
 
 exports.deletarUsuario = async (req, res) => {
+  const usuarioId = req.session.usuarioId;
   await Usuario.destroy({ where: { id: req.params.id } });
-  res.redirect('/usuarios');
+  // Se o usuário deletou o próprio perfil, limpar a sessão
+  if (parseInt(req.params.id) === usuarioId) {
+    req.session.destroy(() => {
+      res.redirect('/');
+    });
+  } else {
+    res.redirect('/usuarios');
+  }
 };

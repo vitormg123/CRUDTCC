@@ -1,23 +1,63 @@
+html {
+  background: #1a1a1a !important;
+  height: 100%;
+}
 body {
-  background: #1a1a1a;
+  min-height: 100vh;
+}
+/* Header com logo, busca e botões lado a lado */
+.header-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
+  gap: 20px;
+}
+.logo-header {
+  height: 60px;
+  margin-right: 20px;
+}
+.search-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  max-width: 400px;
+}
+.search-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  margin: 0 20px;
+}
+body {
+  background: #1a1a1a !important;
   color: #fff;
   font-family: Arial, sans-serif;
   margin: 0;
+}
+.header-nav {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  justify-content: center;
 }
 header {
   background: #b7410e;
   color: #fff;
   padding: 10px 0;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: space-between;
 }
-nav {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-nav button {
+.header-nav button,
+.main-nav button,
+.admin-btn,
+button,
+input[type="submit"] {
   background: #333;
   color: #fff;
   border: none;
@@ -26,8 +66,46 @@ nav button {
   cursor: pointer;
   transition: background 0.2s;
 }
-nav button:hover {
-  background: #b7410e;
+.header-nav button:hover,
+.main-nav button:hover,
+.admin-btn:hover,
+button:hover,
+input[type="submit"]:hover {
+  background: #444;
+}
+.main-nav {
+  background: #292929;
+  display: flex;
+  gap: 10px;
+  padding: 10px 0;
+  border-bottom: 1px solid #222;
+  justify-content: center;
+  align-items: center;
+}
+.perfil-btn {
+  background: #333;
+  border-radius: 50%;
+  padding: 0;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border: none;
+  margin-left: 5px;
+}
+.perfil-btn:hover {
+  background: #444;
+}
+.perfil-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+.main-nav button:hover {
+  background: #555;
 }
 input[type="text"] {
   padding: 6px;
@@ -38,4 +116,5 @@ input[type="text"] {
 }
 main {
   padding: 30px;
+  background: transparent;
 }

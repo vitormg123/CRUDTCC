@@ -1,0 +1,102 @@
+<% /* Página de Perfil do Admin */ %>
+<div class="perfil-container">
+  <div class="perfil-header">
+    <% if (usuario.fotoPerfil) { %>
+      <img src="<%= usuario.fotoPerfil %>" alt="Foto de Perfil" class="perfil-foto">
+    <% } else { %>
+      <img src="/img/user.png" alt="Foto de Perfil" class="perfil-foto">
+    <% } %>
+    <h2><%= usuario.nome %> <span style="font-size:0.7em; color:#b7410e;">(Admin)</span></h2>
+  </div>
+  <div style="margin: 20px 0;">
+    <a href="/produtos/novo"><button class="admin-btn">Cadastrar Produto</button></a>
+    <a href="/categorias/nova"><button class="admin-btn">Cadastrar Categoria</button></a>
+  </div>
+  <h3>Categorias Cadastradas</h3>
+  <ul class="lista-categorias">
+    <% if (categorias.length > 0) { %>
+      <% categorias.forEach(cat => { %>
+        <li><%= cat.nome %></li>
+      <% }) %>
+    <% } else { %>
+      <li>Nenhuma categoria cadastrada.</li>
+    <% } %>
+  </ul>
+  <hr>
+  <h3>Meu Carrinho</h3>
+  <table>
+    <tr><th>Produto</th><th>Preço</th><th>Desconto</th><th>Quantidade</th><th>Subtotal</th><th>Ações</th></tr>
+    <% if (itens.length > 0) { %>
+      <% itens.forEach(item => { %>
+        <tr>
+          <td><%= item.produto.nome %></td>
+          <td>R$ <%= item.produto.preco.toFixed(2) %></td>
+          <td><%= item.produto.desconto %> %</td>
+          <td><%= item.quantidade %></td>
+          <td>R$ <%= (item.produto.preco * item.quantidade * (1 - item.produto.desconto/100)).toFixed(2) %></td>
+          <td>
+            <form action="/carrinho/remover/<%= item.produto.id %>" method="post" style="display:inline;">
+              <button type="submit">Remover</button>
+            </form>
+          </td>
+        </tr>
+      <% }) %>
+    <% } else { %>
+      <tr><td colspan="6">Seu carrinho está vazio.</td></tr>
+    <% } %>
+  </table>
+  <% if (itens.length > 0) { %>
+    <p><strong>Total: R$ <%= total.toFixed(2) %></strong></p>
+    <form action="/carrinho/finalizar" method="post">
+      <button type="submit">Finalizar Compra</button>
+    </form>
+  <% } %>
+</div>
+<style>
+.perfil-container {
+  background: #222;
+  border-radius: 8px;
+  padding: 30px;
+  max-width: 600px;
+  margin: 40px auto;
+  color: #fff;
+}
+.perfil-header {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+.perfil-foto {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: #444;
+  border: 2px solid #b7410e;
+  object-fit: cover;
+}
+.admin-btn {
+  background: #333;
+  color: #fff;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-right: 10px;
+  transition: background 0.2s;
+}
+.admin-btn:hover {
+  background: #444;
+}
+.lista-categorias {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 20px 0;
+}
+.lista-categorias li {
+  background: #333;
+  color: #fff;
+  margin-bottom: 6px;
+  padding: 8px 12px;
+  border-radius: 4px;
+}
+</style>
