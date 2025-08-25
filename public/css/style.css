@@ -2,9 +2,26 @@ html {
   background: #1a1a1a !important;
   height: 100%;
 }
+
 body {
   min-height: 100vh;
+  background: #1a1a1a !important;
+  color: #fff;
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding-bottom: 60px; /* Espaço para o footer não cobrir o conteúdo */
 }
+
+/* Header */
+header {
+  background-color: #cf5209; /* Laranja escuro intenso */
+  color: #fff;
+  padding: 10px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
 /* Header com logo, busca e botões lado a lado */
 .header-content {
   display: flex;
@@ -14,45 +31,56 @@ body {
   margin: 0 auto;
   width: 100%;
   gap: 20px;
+  background: transparent; /* Herda o laranja do header */
 }
+
 .logo-header {
   height: 60px;
   margin-right: 20px;
 }
+
+/* Barra de pesquisa maior */
 .search-bar {
   display: flex;
   align-items: center;
   justify-content: center;
   flex: 1;
-  max-width: 400px;
-}
-.search-bar {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
+  max-width: 600px; /* Mais larga */
   margin: 0 20px;
 }
-body {
-  background: #1a1a1a !important;
+
+.search-bar input[type="text"] {
+  padding: 10px 16px; /* Mais alto e confortável */
+  border-radius: 6px 0 0 6px; /* Canto arredondado à esquerda */
+  border: 1px solid #444;
+  background: #222;
   color: #fff;
-  font-family: Arial, sans-serif;
-  margin: 0;
+  font-size: 16px;
+  width: 100%; /* Ocupa toda a largura disponível */
 }
+
+.search-bar button {
+  padding: 10px 20px; /* Botão proporcional */
+  border-radius: 0 6px 6px 0; /* Canto arredondado à direita */
+  background: #333;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.search-bar button:hover {
+  background: #444;
+}
+
+
 .header-nav {
   display: flex;
   align-items: center;
   gap: 10px;
   justify-content: center;
 }
-header {
-  background: #b7410e;
-  color: #fff;
-  padding: 10px 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
+
 .header-nav button,
 .main-nav button,
 .admin-btn,
@@ -66,6 +94,7 @@ input[type="submit"] {
   cursor: pointer;
   transition: background 0.2s;
 }
+
 .header-nav button:hover,
 .main-nav button:hover,
 .admin-btn:hover,
@@ -73,15 +102,29 @@ button:hover,
 input[type="submit"]:hover {
   background: #444;
 }
+
+/* Main nav (cinza escuro) */
 .main-nav {
-  background: #292929;
+  background-color: #292929; /* Cinza escuro */
   display: flex;
-  gap: 10px;
-  padding: 10px 0;
-  border-bottom: 1px solid #222;
+  gap: 15px;
+  padding: 15px 0; /* Mais altura */
   justify-content: center;
   align-items: center;
+  font-size: 18px; /* Texto maior */
 }
+
+.main-nav button {
+  padding: 12px 24px; /* Botões maiores e com mais espaço interno */
+  font-size: 16px;
+  border-radius: 6px;
+}
+
+.main-nav button:hover {
+  background-color: #444; /* Mantém hover escuro */
+}
+
+
 .perfil-btn {
   background: #333;
   border-radius: 50%;
@@ -95,18 +138,18 @@ input[type="submit"]:hover {
   border: none;
   margin-left: 5px;
 }
+
 .perfil-btn:hover {
   background: #444;
 }
+
 .perfil-icon {
   width: 32px;
   height: 32px;
   border-radius: 50%;
   object-fit: cover;
 }
-.main-nav button:hover {
-  background: #555;
-}
+
 input[type="text"] {
   padding: 6px;
   border-radius: 4px;
@@ -114,7 +157,25 @@ input[type="text"] {
   background: #222;
   color: #fff;
 }
+
 main {
   padding: 30px;
   background: transparent;
+  text-align: center;
+}
+
+/* Footer fixo */
+.footer-bar {
+  width: 100%;
+  background-color: #cf5209; /* Laranja escuro intenso */
+  color: #fff;
+  text-align: center;
+  padding: 12px 0;
+  font-size: 18px;
+  font-weight: bold;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  z-index: 100;
+  cursor: pointer;
 }

@@ -12,17 +12,17 @@
       <img src="/img/logo.png" alt="Logo Heranças do Sul" class="logo-header">
       <div class="search-bar">
         <input type="text" placeholder="Pesquisar produtos...">
-        <button><img src="/img/search.png" alt="Pesquisar" style="height:20px;"></button>
+        <button>Pesquisar</button>
       </div>
       <nav class="header-nav">
-        <a href="/carrinho" style="display:inline-block;"><button><img src="/img/cart.png" alt="Carrinho" style="height:20px;"></button></a>
+        <a href="/carrinho"><button>Carrinho</button></a>
         <% if (!usuario || !usuario.usuarioId || !usuario.tipo) { %>
           <% if (typeof maisDeUmUsuario !== 'undefined' && maisDeUmUsuario) { %>
             <a href="/login"><button>Entrar</button></a>
           <% } else { %>
-            <a href="/usuarios/novo"><button><img src="/img/user.png" alt="Usuário" style="height:20px;vertical-align:middle;margin-right:6px;"></button></a>
+            <a href="/usuarios/novo"><button>Cadastrar-se</button></a>
           <% } %>
-  <% } else { %>
+        <% } else { %>
           <% if (usuario.tipo === 'admin') { %>
             <a href="/perfil-admin"><button class="perfil-btn">
               <% if (usuario.fotoPerfil) { %>
@@ -33,11 +33,11 @@
             </button></a>
           <% } else { %>
             <a href="/perfil"><button class="perfil-btn">
-            <% if (usuario.fotoPerfil) { %>
-              <img src="<%= usuario.fotoPerfil %>" alt="Perfil" class="perfil-icon">
-            <% } else { %>
-              <img src="/img/user.png" alt="Perfil" class="perfil-icon">
-            <% } %>
+              <% if (usuario.fotoPerfil) { %>
+                <img src="<%= usuario.fotoPerfil %>" alt="Perfil" class="perfil-icon">
+              <% } else { %>
+                <img src="/img/user.png" alt="Perfil" class="perfil-icon">
+              <% } %>
             </button></a>
           <% } %>
           <% if (usuario.tipo === 'admin') { %>
@@ -50,16 +50,23 @@
       </nav>
     </div>
   </header>
+
   <nav class="main-nav">
     <a href="/categorias"><button>Categorias</button></a>
     <a href="/produtos/novidades"><button>Novidades</button></a>
     <a href="/produtos/descontos"><button>Descontos</button></a>
     <a href="/produtos/populares"><button>Populares</button></a>
   </nav>
+
   <main>
     <h1>Bem-vindo à Heranças do Sul</h1>
     <p>Seu e-commerce de botas!</p>
     <!-- Produtos e filtros serão exibidos aqui -->
   </main>
+
+  <!-- Barra laranja fixa no rodapé -->
+  <div class="footer-bar">
+    48 98868-6376
+  </div>
 </body>
 </html>
