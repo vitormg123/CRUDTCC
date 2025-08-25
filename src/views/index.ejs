@@ -43,8 +43,6 @@
           <% if (usuario.tipo === 'admin') { %>
             <a href="/categorias/nova"><button style="background:#b7410e;color:#fff;">Cadastrar Categoria</button></a>
             <a href="/produtos/novo"><button style="background:#b7410e;color:#fff;">Cadastrar Produto</button></a>
-            <a href="/categorias"><button style="background:#b7410e;color:#fff;">Ver Categorias</button></a>
-            <a href="/produtos"><button style="background:#b7410e;color:#fff;">Ver Produtos</button></a>
           <% } %>
         <% } %>
       </nav>
@@ -52,11 +50,18 @@
   </header>
 
   <nav class="main-nav">
-    <a href="/categorias"><button>Categorias</button></a>
-    <a href="/produtos/novidades"><button>Novidades</button></a>
-    <a href="/produtos/descontos"><button>Descontos</button></a>
-    <a href="/produtos/populares"><button>Populares</button></a>
-  </nav>
+  <div class="dropdown">
+    <button class="dropbtn">Categorias</button>
+    <div class="dropdown-content">
+      <% categorias.forEach(cat => { %>
+        <a href="/produtos/categoria/<%= cat.id %>"><%= cat.nome %></a>
+      <% }) %>
+    </div>
+  </div>
+  <a href="/produtos/novidades"><button>Novidades</button></a>
+  <a href="/produtos/descontos"><button>Descontos</button></a>
+  <a href="/produtos/populares"><button>Populares</button></a>
+</nav>
 
   <main>
     <h1>Bem-vindo à Heranças do Sul</h1>

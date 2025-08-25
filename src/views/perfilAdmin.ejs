@@ -8,10 +8,7 @@
     <% } %>
     <h2><%= usuario.nome %> <span style="font-size:0.7em; color:#b7410e;">(Admin)</span></h2>
   </div>
-  <div style="margin: 20px 0;">
-    <a href="/produtos/novo"><button class="admin-btn">Cadastrar Produto</button></a>
-    <a href="/categorias/nova"><button class="admin-btn">Cadastrar Categoria</button></a>
-  </div>
+
   <h3>Categorias Cadastradas</h3>
   <ul class="lista-categorias">
     <% if (categorias.length > 0) { %>
@@ -22,7 +19,9 @@
       <li>Nenhuma categoria cadastrada.</li>
     <% } %>
   </ul>
+
   <hr>
+
   <h3>Meu Carrinho</h3>
   <table>
     <tr><th>Produto</th><th>Preço</th><th>Desconto</th><th>Quantidade</th><th>Subtotal</th><th>Ações</th></tr>
@@ -45,6 +44,7 @@
       <tr><td colspan="6">Seu carrinho está vazio.</td></tr>
     <% } %>
   </table>
+
   <% if (itens.length > 0) { %>
     <p><strong>Total: R$ <%= total.toFixed(2) %></strong></p>
     <form action="/carrinho/finalizar" method="post">
@@ -52,20 +52,28 @@
     </form>
   <% } %>
 </div>
+
 <style>
+body {
+  background: #292929; /* Fundo cinza escuro da página */
+}
+
 .perfil-container {
-  background: #222;
+  background: #222; /* Fundo do container */
+  border: 2px solid #cf5209; /* Borda laranja */
   border-radius: 8px;
   padding: 30px;
   max-width: 600px;
   margin: 40px auto;
   color: #fff;
 }
+
 .perfil-header {
   display: flex;
   align-items: center;
   gap: 20px;
 }
+
 .perfil-foto {
   width: 80px;
   height: 80px;
@@ -74,24 +82,13 @@
   border: 2px solid #b7410e;
   object-fit: cover;
 }
-.admin-btn {
-  background: #333;
-  color: #fff;
-  border: none;
-  padding: 8px 16px;
-  border-radius: 4px;
-  cursor: pointer;
-  margin-right: 10px;
-  transition: background 0.2s;
-}
-.admin-btn:hover {
-  background: #444;
-}
+
 .lista-categorias {
   list-style: none;
   padding: 0;
   margin: 0 0 20px 0;
 }
+
 .lista-categorias li {
   background: #333;
   color: #fff;

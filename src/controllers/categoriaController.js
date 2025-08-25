@@ -12,7 +12,14 @@ exports.formNovaCategoria = (req, res) => {
 exports.criarCategoria = async (req, res) => {
   const { nome } = req.body;
   await Categoria.create({ nome });
-  res.redirect('/categorias');
+
+  // Armazena mensagem de sucesso na sessão
+  if (req.session) {
+    req.session.mensagemSucesso = `Categoria "${nome}" cadastrada com sucesso!`;
+  }
+
+  // Redireciona para a página inicial
+  res.redirect('/');
 };
 
 exports.formEditarCategoria = async (req, res) => {
@@ -23,10 +30,22 @@ exports.formEditarCategoria = async (req, res) => {
 exports.editarCategoria = async (req, res) => {
   const { nome } = req.body;
   await Categoria.update({ nome }, { where: { id: req.params.id } });
-  res.redirect('/categorias');
+
+  // Mensagem de sucesso opcional
+  if (req.session) {
+    req.session.mensagemSucesso = `Categoria atualizada para "${nome}" com sucesso!`;
+  }
+
+  res.redirect('/');
 };
 
 exports.deletarCategoria = async (req, res) => {
+  const categoria = await Categoria.findByPk(req.params.id);
   await Categoria.destroy({ where: { id: req.params.id } });
-  res.redirect('/categorias');
+
+  if (req.session && categoria) {
+    req.session.mensagemSucesso = `Categoria "${categoria.nome}" deletada com sucesso!`;
+  }
+
+  res.redirect('/');
 };
