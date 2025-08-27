@@ -50,23 +50,17 @@ function requireAuth(req, res, next) {
 }
 
 // Libera cadastro se não há usuários ou exige admin
-async function cadastroLiberadoOuAdmin(req, res, next) {
-  const count = await Usuario.count();
-  if (count === 0) {
-    return next();
-  }
-  if (req.session && req.session.tipo === 'admin') {
-    return next();
-  }
-  return res.redirect('/login');
-}
+
 
 // Rotas
 app.use(authRoutes);
 
 app.use('/usuarios', (req, res, next) => {
-  if (req.path === '/novo' || req.path === '/novo/') {
-    return cadastroLiberadoOuAdmin(req, res, next);
+  if (
+    req.path === '/novo' || req.path === '/novo/' ||
+    (req.method === 'POST' && /\/deletar$/.test(req.path))
+  ) {
+    return next();
   }
   return requireAdmin(req, res, next);
 }, usuarioRoutes);

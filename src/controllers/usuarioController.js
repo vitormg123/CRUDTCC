@@ -39,6 +39,7 @@ exports.deletarUsuario = async (req, res) => {
   // Se o usuário deletou o próprio perfil, limpar a sessão
   if (parseInt(req.params.id) === usuarioId) {
     req.session.destroy(() => {
+      res.clearCookie('connect.sid');
       res.redirect('/');
     });
   } else {

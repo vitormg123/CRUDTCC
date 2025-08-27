@@ -8,7 +8,7 @@ exports.verCarrinho = async (req, res) => {
     return { produto, quantidade: item ? item.quantidade : 1 };
   });
   const total = itens.reduce((soma, item) => soma + (item.produto.preco * item.quantidade * (1 - item.produto.desconto/100)), 0);
-  res.render('carrinho', { itens, total });
+  res.render('carrinho', { itens, total, mensagem: null });
 };
 
 exports.adicionarAoCarrinho = async (req, res) => {

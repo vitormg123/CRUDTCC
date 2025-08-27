@@ -17,11 +17,8 @@
       <nav class="header-nav">
         <a href="/carrinho"><button>Carrinho</button></a>
         <% if (!usuario || !usuario.usuarioId || !usuario.tipo) { %>
-          <% if (typeof maisDeUmUsuario !== 'undefined' && maisDeUmUsuario) { %>
-            <a href="/login"><button>Entrar</button></a>
-          <% } else { %>
-            <a href="/usuarios/novo"><button>Cadastrar-se</button></a>
-          <% } %>
+          <a href="/login"><button>Entrar</button></a>
+          <a href="/usuarios/novo"><button>Cadastrar-se</button></a>
         <% } else { %>
           <% if (usuario.tipo === 'admin') { %>
             <a href="/perfil-admin"><button class="perfil-btn">
