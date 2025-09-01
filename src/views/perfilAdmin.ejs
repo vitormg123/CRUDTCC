@@ -13,7 +13,12 @@
   <ul class="lista-categorias">
     <% if (categorias.length > 0) { %>
       <% categorias.forEach(cat => { %>
-        <li><%= cat.nome %></li>
+        <li>
+          <span><%= cat.nome %></span>
+          <form action="/categorias/lista/<%= cat.id %>" method="post" style="display:inline; float:right;">
+            <button type="submit" class="btn-apagar">Apagar</button>
+          </form>
+        </li>
       <% }) %>
     <% } else { %>
       <li>Nenhuma categoria cadastrada.</li>
@@ -52,7 +57,18 @@
     </form>
   <% } %>
 </div>
-
+<!-- Zona Perigosa -->
+  <div class="danger-zone-wrapper">
+    <button class="danger-toggle" onclick="toggleDangerZone()">&gt;</button>
+    <div class="danger-zone" id="dangerZone">
+      <h4>Zona Perigosa</h4>
+      <form action="/usuarios/<%= usuario.usuarioId || usuario.id %>/deletar" method="post" onsubmit="return confirm('Tem certeza que deseja deletar sua conta? Esta ação não pode ser desfeita!');">
+  <button type="submit" class="danger-btn">Deletar Conta</button>
+      </form>
+      <a href="/logout"><button class="danger-btn danger-btn-out">Sair</button></a>
+    </div>
+  </div>
+</div>
 <style>
 body {
   background: #292929; /* Fundo cinza escuro da página */
@@ -95,5 +111,22 @@ body {
   margin-bottom: 6px;
   padding: 8px 12px;
   border-radius: 4px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.btn-apagar {
+  background: #b7410e;
+  color: #fff;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.btn-apagar:hover {
+  background: #a63a0d;
 }
 </style>

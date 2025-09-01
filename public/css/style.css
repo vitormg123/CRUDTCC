@@ -1,3 +1,8 @@
+:root {
+  /* Altura do cabeçalho laranja (ajuste se quiser) */
+  --header-h: 80px;
+}
+
 html {
   background: #1a1a1a !important;
   height: 100%;
@@ -16,7 +21,9 @@ body {
 header {
   background-color: #cf5209; /* Laranja escuro intenso */
   color: #fff;
-  padding: 10px 0;
+  /* A logo vai usar 100% desta altura */
+  height: var(--header-h);
+  padding: 0; /* Sem padding para a altura do header ser exata */
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -32,10 +39,15 @@ header {
   width: 100%;
   gap: 20px;
   background: transparent; /* Herda o laranja do header */
+  height: 100%; /* Ocupa 100% da altura do header */
 }
 
+/* LOGO — mesma altura do header e alinhada à esquerda */
 .logo-header {
-  height: 60px;
+  height: 100%;       /* Igual à altura do header */
+  width: auto;        /* Mantém proporção e aumenta a largura conforme a altura */
+  display: block;
+  object-fit: contain; /* Evita distorção */
   margin-right: 20px;
 }
 
@@ -72,7 +84,6 @@ header {
 .search-bar button:hover {
   background: #444;
 }
-
 
 .header-nav {
   display: flex;
@@ -123,7 +134,6 @@ input[type="submit"]:hover {
 .main-nav button:hover {
   background-color: #444; /* Mantém hover escuro */
 }
-
 
 .perfil-btn {
   background: #333;
@@ -179,7 +189,8 @@ main {
   z-index: 100;
   cursor: pointer;
 }
-/*Dropdown*/
+
+/* Dropdown */
 .dropdown {
   position: relative;
   display: inline-block;
