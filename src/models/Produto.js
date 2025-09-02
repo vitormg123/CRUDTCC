@@ -8,6 +8,7 @@ const Produto = sequelize.define('Produto', {
   descricao: { type: DataTypes.TEXT, allowNull: false },
   preco: { type: DataTypes.FLOAT, allowNull: false },
   desconto: { type: DataTypes.FLOAT, defaultValue: 0 },
+  tamanho: { type: DataTypes.STRING, allowNull: false }, // Novo campo
   imagem: { type: DataTypes.STRING },
   criadoEm: { type: DataTypes.DATE, defaultValue: DataTypes.NOW },
   quantidadeVendida: { type: DataTypes.INTEGER, defaultValue: 0 }

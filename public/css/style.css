@@ -1,84 +1,67 @@
 :root {
-  /* Altura do cabeçalho laranja (ajuste se quiser) */
   --header-h: 80px;
 }
 
-html {
-  background: #1a1a1a !important;
-  height: 100%;
-}
-
-body {
-  min-height: 100vh;
-  background: #1a1a1a !important;
+html, body {
+  background: #1a1a1a;
   color: #fff;
   font-family: Arial, sans-serif;
   margin: 0;
-  padding-bottom: 60px; /* Espaço para o footer não cobrir o conteúdo */
+  padding: 0 0 60px 0;
+  height: 100%;
 }
 
-/* Header */
 header {
-  background-color: #cf5209; /* Laranja escuro intenso */
-  color: #fff;
-  /* A logo vai usar 100% desta altura */
+  background-color: #cf5209;
   height: var(--header-h);
-  padding: 0; /* Sem padding para a altura do header ser exata */
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-/* Header com logo, busca e botões lado a lado */
-.header-content {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  max-width: 1200px;
-  margin: 0 auto;
-  width: 100%;
-  gap: 20px;
-  background: transparent; /* Herda o laranja do header */
-  height: 100%; /* Ocupa 100% da altura do header */
-}
-
-/* LOGO — mesma altura do header e alinhada à esquerda */
-.logo-header {
-  height: 100%;       /* Igual à altura do header */
-  width: auto;        /* Mantém proporção e aumenta a largura conforme a altura */
-  display: block;
-  object-fit: contain; /* Evita distorção */
-  margin-right: 20px;
-}
-
-/* Barra de pesquisa maior */
-.search-bar {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.header-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* logo à esquerda, perfil à direita */
+  width: 100%;
+  max-width: 1200px;
+  height: 100%;
+  padding: 0 20px;
+  box-sizing: border-box;
+}
+
+.logo-header {
+  height: 100%;
+  width: auto;
+  object-fit: contain;
+}
+
+.search-bar {
   flex: 1;
-  max-width: 600px; /* Mais larga */
   margin: 0 20px;
+  display: flex;
+  align-items: center;
 }
 
 .search-bar input[type="text"] {
-  padding: 10px 16px; /* Mais alto e confortável */
-  border-radius: 6px 0 0 6px; /* Canto arredondado à esquerda */
+  flex: 1;
+  padding: 10px 16px;
+  border-radius: 6px 0 0 6px;
   border: 1px solid #444;
   background: #222;
   color: #fff;
   font-size: 16px;
-  width: 100%; /* Ocupa toda a largura disponível */
 }
 
 .search-bar button {
-  padding: 10px 20px; /* Botão proporcional */
-  border-radius: 0 6px 6px 0; /* Canto arredondado à direita */
+  padding: 10px 20px;
+  border-radius: 0 6px 6px 0;
+  border: none;
   background: #333;
   color: #fff;
-  border: none;
   cursor: pointer;
   font-size: 16px;
+  transition: background 0.2s;
 }
 
 .search-bar button:hover {
@@ -88,65 +71,19 @@ header {
 .header-nav {
   display: flex;
   align-items: center;
-  gap: 10px;
-  justify-content: center;
-}
-
-.header-nav button,
-.main-nav button,
-.admin-btn,
-button,
-input[type="submit"] {
-  background: #333;
-  color: #fff;
-  border: none;
-  padding: 8px 16px;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background 0.2s;
-}
-
-.header-nav button:hover,
-.main-nav button:hover,
-.admin-btn:hover,
-button:hover,
-input[type="submit"]:hover {
-  background: #444;
-}
-
-/* Main nav (cinza escuro) */
-.main-nav {
-  background-color: #292929; /* Cinza escuro */
-  display: flex;
-  gap: 15px;
-  padding: 15px 0; /* Mais altura */
-  justify-content: center;
-  align-items: center;
-  font-size: 18px; /* Texto maior */
-}
-
-.main-nav button {
-  padding: 12px 24px; /* Botões maiores e com mais espaço interno */
-  font-size: 16px;
-  border-radius: 6px;
-}
-
-.main-nav button:hover {
-  background-color: #444; /* Mantém hover escuro */
 }
 
 .perfil-btn {
   background: #333;
+  width: 50px;
+  height: 50px;
   border-radius: 50%;
-  padding: 0;
-  width: 40px;
-  height: 40px;
   display: flex;
-  align-items: center;
   justify-content: center;
-  overflow: hidden;
+  align-items: center;
   border: none;
-  margin-left: 5px;
+  cursor: pointer;
+  transition: background 0.2s;
 }
 
 .perfil-btn:hover {
@@ -154,30 +91,55 @@ input[type="submit"]:hover {
 }
 
 .perfil-icon {
-  width: 32px;
-  height: 32px;
+  width: 42px;
+  height: 42px;
   border-radius: 50%;
   object-fit: cover;
 }
 
-input[type="text"] {
-  padding: 6px;
-  border-radius: 4px;
-  border: 1px solid #444;
-  background: #222;
+button,
+input[type="submit"] {
+  background: #333;
   color: #fff;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+button:hover,
+input[type="submit"]:hover {
+  background: #444;
+}
+
+.main-nav {
+  background-color: #292929;
+  display: flex;
+  gap: 15px;
+  padding: 15px 0;
+  justify-content: center;
+  align-items: center;
+  font-size: 18px;
+}
+
+.main-nav button {
+  padding: 12px 24px;
+  border-radius: 6px;
+}
+
+.main-nav button:hover {
+  background-color: #444;
 }
 
 main {
   padding: 30px;
-  background: transparent;
   text-align: center;
 }
 
-/* Footer fixo */
 .footer-bar {
   width: 100%;
-  background-color: #cf5209; /* Laranja escuro intenso */
+  background-color: #cf5209;
   color: #fff;
   text-align: center;
   padding: 12px 0;
@@ -197,13 +159,13 @@ main {
 }
 
 .dropbtn {
-  background-color: #292929; /* Cinza escuro */
+  background-color: #292929;
   color: white;
   padding: 12px 24px;
   font-size: 16px;
   border: none;
-  cursor: pointer;
   border-radius: 6px;
+  cursor: pointer;
 }
 
 .dropdown-content {

@@ -1,15 +1,99 @@
 <h2>Novo Produto</h2>
-<form action="/produtos/novo" method="post">
-  <label>Nome: <input type="text" name="nome" required></label><br>
-  <label>Descrição: <textarea name="descricao" required></textarea></label><br>
-  <label>Preço: <input type="number" step="0.01" name="preco" required></label><br>
-  <label>Desconto (%): <input type="number" step="0.01" name="desconto"></label><br>
+<form action="/produtos/novo" method="post" class="form-container">
+  <label>Nome:
+    <input type="text" name="nome" required>
+  </label>
+
+  <label>Descrição:
+    <textarea name="descricao" required></textarea>
+  </label>
+
+  <label>Preço:
+    <input type="number" step="0.01" name="preco" required>
+  </label>
+
+  <label>Desconto (%):
+    <input type="number" step="0.01" name="desconto">
+  </label>
+
+  <label for="tamanho">Tamanho:</label>
+        <input type="text" id="tamanho" name="tamanho" placeholder="Ex: 37, 38, 39..." required>
+
   <label>Categoria:
     <select name="categoriaId" required>
       <% categorias.forEach(categoria => { %>
         <option value="<%= categoria.id %>"><%= categoria.nome %></option>
       <% }) %>
     </select>
-  </label><br>
-  <button type="submit">Cadastrar</button>
+  </label>
+
+  <button type="submit" class="btn-primary">Cadastrar</button>
 </form>
+
+<style>
+  body {
+    background-color: #1a1a1a;
+    color: #fff;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+  }
+
+  h2 {
+    text-align: center;
+    margin: 30px 0;
+    color: #fff;
+  }
+
+  .form-container {
+    background: #1a1a1a;
+    padding: 25px;
+    border-radius: 10px;
+    border: 2.5px solid #cf5209;
+    max-width: 500px;
+    margin: 0 auto;
+    box-shadow: 0 0 15px #0008;
+  }
+
+  label {
+    display: block;
+    margin: 15px 0;
+    font-weight: bold;
+  }
+
+  input, textarea, select {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    border: 1px solid #444;
+    border-radius: 5px;
+    background: #222;
+    color: #fff;
+    font-size: 14px;
+  }
+
+  input:focus, textarea:focus, select:focus {
+    outline: none;
+    border-color: #cf5209;
+    box-shadow: 0 0 8px #cf520955;
+  }
+
+  .btn-primary {
+    display: inline-block;
+    padding: 12px 20px;
+    background: #cf5209;
+    border: none;
+    border-radius: 6px;
+    color: #fff;
+    font-weight: bold;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background 0.2s ease-in-out;
+    width: 100%;
+    margin-top: 20px;
+  }
+
+  .btn-primary:hover {
+    background: #e55d12;
+  }
+</style>

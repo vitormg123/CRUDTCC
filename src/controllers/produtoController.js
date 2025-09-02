@@ -12,8 +12,8 @@ exports.formNovoProduto = async (req, res) => {
 };
 
 exports.criarProduto = async (req, res) => {
-  const { nome, descricao, preco, desconto, categoriaId } = req.body;
-  await Produto.create({ nome, descricao, preco, desconto, categoriaId });
+  const { nome, descricao, preco, desconto, categoriaId, tamanho } = req.body; // adiciona tamanho
+  await Produto.create({ nome, descricao, preco, desconto, categoriaId, tamanho });
   res.redirect('/produtos');
 };
 
@@ -24,8 +24,11 @@ exports.formEditarProduto = async (req, res) => {
 };
 
 exports.editarProduto = async (req, res) => {
-  const { nome, descricao, preco, desconto, categoriaId } = req.body;
-  await Produto.update({ nome, descricao, preco, desconto, categoriaId }, { where: { id: req.params.id } });
+  const { nome, descricao, preco, desconto, categoriaId, tamanho } = req.body; // adiciona tamanho
+  await Produto.update(
+    { nome, descricao, preco, desconto, categoriaId, tamanho },
+    { where: { id: req.params.id } }
+  );
   res.redirect('/produtos');
 };
 

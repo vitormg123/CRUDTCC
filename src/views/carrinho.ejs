@@ -1,27 +1,112 @@
-<h2>Carrinho de Compras</h2>
-<% if (mensagem) { %>
-  <p style="color:green"><%= mensagem %></p>
-<% } %>
-<table>
-  <tr><th>Produto</th><th>Preço</th><th>Desconto</th><th>Quantidade</th><th>Subtotal</th><th>Ações</th></tr>
-  <% itens.forEach(item => { %>
-    <tr>
-      <td><%= item.produto.nome %></td>
-      <td>R$ <%= item.produto.preco.toFixed(2) %></td>
-      <td><%= item.produto.desconto %> %</td>
-      <td><%= item.quantidade %></td>
-      <td>R$ <%= (item.produto.preco * item.quantidade * (1 - item.produto.desconto/100)).toFixed(2) %></td>
-      <td>
-        <form action="/carrinho/remover/<%= item.produto.id %>" method="post" style="display:inline;">
-          <button type="submit">Remover</button>
-        </form>
-      </td>
-    </tr>
-  <% }) %>
-</table>
-<p><strong>Total: R$ <%= total.toFixed(2) %></strong></p>
-<% if (itens.length > 0) { %>
-  <form action="/carrinho/finalizar" method="post">
-    <button type="submit">Finalizar Compra</button>
-  </form>
-<% } %>
+<body class="carrinho-bg">
+  <h2 class="carrinho-titulo">Carrinho de Compras</h2>
+
+  <div class="carrinho-container">
+    <% if (mensagem) { %>
+      <p class="mensagem"><%= mensagem %></p>
+    <% } %>
+
+    <table>
+      <tr>
+        <th>Produto</th><th>Preço</th><th>Desconto</th>
+        <th>Quantidade</th><th>Subtotal</th><th>Ações</th>
+      </tr>
+      <% itens.forEach(item => { %>
+        <tr>
+          <td><%= item.produto.nome %></td>
+          <td>R$ <%= item.produto.preco.toFixed(2) %></td>
+          <td><%= item.produto.desconto %> %</td>
+          <td><%= item.quantidade %></td>
+          <td>R$ <%= (item.produto.preco * item.quantidade * (1 - item.produto.desconto/100)).toFixed(2) %></td>
+          <td>
+            <form action="/carrinho/remover/<%= item.produto.id %>" method="post" style="display:inline;">
+              <button type="submit" class="btn-remover">Remover</button>
+            </form>
+          </td>
+        </tr>
+      <% }) %>
+    </table>
+
+    <p><strong>Total: R$ <%= total.toFixed(2) %></strong></p>
+
+    <% if (itens.length > 0) { %>
+      <form action="/carrinho/finalizar" method="post">
+        <button type="submit" class="btn-finalizar">Finalizar Compra</button>
+      </form>
+    <% } %>
+  </div>
+
+<style>
+body.carrinho-bg {
+  background: #1a1a1a;
+  margin: 0;
+  font-family: Arial, sans-serif;
+  color: #fff;
+  min-height: 100vh;
+}
+
+.carrinho-titulo {
+  text-align: center;
+  color: #fff;
+  margin-top: 30px;
+  margin-bottom: 20px;
+}
+
+.carrinho-container {
+  background: #1a1a1a;
+  border: 2.5px solid #cf5209;
+  border-radius: 12px;
+  padding: 20px;
+  max-width: 800px;
+  margin: 0 auto 50px auto;
+  box-shadow: 0 0 12px #0007;
+}
+
+.mensagem {
+  color: green;
+  margin-bottom: 15px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 15px;
+}
+th, td {
+  padding: 10px;
+  border-bottom: 1px solid #333;
+  text-align: center;
+}
+th {
+  background: #222;
+  color: #cf5209;
+}
+
+.btn-remover {
+  background: #444;
+  color: #fff;
+  border: 1px solid #cf5209;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.btn-remover:hover {
+  background: #333;
+}
+
+.btn-finalizar {
+  background: #cf5209;
+  color: #fff;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background 0.2s;
+}
+.btn-finalizar:hover {
+  background: #e6661a;
+}
+</style>
+</body>
