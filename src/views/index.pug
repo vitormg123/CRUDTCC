@@ -1,0 +1,67 @@
+doctype html
+html(lang="pt-br")
+  head
+    meta(charset="UTF-8")
+    meta(name="viewport", content="width=device-width, initial-scale=1.0")
+    title Heranças do Sul
+    link(rel="stylesheet", href="/css/style.css")
+
+  body
+    header
+      .header-content
+        img(src="/img/logo.png", alt="Logo Heranças do Sul", class="logo-header")
+        .search-bar
+          input(type="text", placeholder="Pesquisar produtos...")
+          button Pesquisar
+        nav.header-nav
+          a(href="/carrinho")
+            button Carrinho
+
+          if !usuario || !usuario.usuarioId || !usuario.tipo
+            a(href="/login")
+              button Entrar
+            a(href="/usuarios/novo")
+              button Cadastrar-se
+          else
+            if usuario.tipo === 'admin'
+              a(href="/perfil-admin")
+                button.perfil-btn
+                  if usuario.fotoPerfil
+                    img(src=usuario.fotoPerfil, alt="Perfil", class="perfil-icon")
+                  else
+                    img(src="/img/user.png", alt="Perfil", class="perfil-icon")
+              a(href="/categorias/nova")
+                button Cadastrar Categoria
+              a(href="/produtos/novo")
+                button Cadastrar Produto
+            else
+              a(href="/perfil")
+                button.perfil-btn
+                  if usuario.fotoPerfil
+                    img(src=usuario.fotoPerfil, alt="Perfil", class="perfil-icon")
+                  else
+                    img(src="/img/user.png", alt="Perfil", class="perfil-icon")
+
+    nav.main-nav
+      .dropdown
+        button.dropbtn Categorias
+        .dropdown-content
+          each cat in categorias
+            a(href="/produtos/categoria/#{cat.id}")= cat.nome
+
+      //- Mover os botões Novidades, Descontos e Populares para fora da dropdown
+      a(href="/produtos/novidades")
+        button Novidades
+      a(href="/produtos/descontos")
+        button Descontos
+      a(href="/produtos/populares")
+        button Populares
+
+    main
+      h1 Bem-vindo à Heranças do Sul
+      p Seu e-commerce de botas!
+      //- Produtos e filtros serão exibidos aqui
+
+    //- Barra laranja fixa no rodapé
+    .footer-bar
+      | 48 98868-6376

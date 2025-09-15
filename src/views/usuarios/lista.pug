@@ -1,0 +1,22 @@
+h2 Usuários
+
+a(href="/usuarios/novo") Novo Usuário
+
+table
+tr
+th ID
+th Nome
+th Email
+th Tipo
+th Ações
+
+each usuario in usuarios
+tr
+td= usuario.id
+td= usuario.nome
+td= usuario.email
+td= usuario.tipo
+td
+a(href="/usuarios/" + usuario.id + "/editar") Editar
+form(action="/usuarios/" + usuario.id + "/deletar", method="post", style="display:inline;")
+button(type="submit") Deletar

@@ -1,0 +1,18 @@
+h2 Categorias
+
+a(href="/categorias/nova") Nova Categoria
+
+table
+tr
+th ID
+th Nome
+th Ações
+
+each categoria in categorias
+tr
+td= categoria.id
+td= categoria.nome
+td
+a(href="/categorias/" + categoria.id + "/editar") Editar
+form(action="/categorias/" + categoria.id + "/deletar", method="post", style="display:inline;")
+button(type="submit") Deletar

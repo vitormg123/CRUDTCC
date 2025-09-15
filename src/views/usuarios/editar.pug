@@ -1,0 +1,18 @@
+h2 Editar Usuário
+
+form(action="/usuarios/" + usuario.id + "/editar", method="post")
+label
+| Nome:
+input(type="text", name="nome", value=usuario.nome, required)
+br
+label
+| Email:
+input(type="email", name="email", value=usuario.email, required)
+br
+label
+| Tipo:
+select(name="tipo")
+option(value="usuario", selected=(usuario.tipo === 'usuario')) Usuário
+option(value="admin", selected=(usuario.tipo === 'admin')) Administrador
+br
+button(type="submit") Salvar

@@ -1,0 +1,26 @@
+h2 Editar Produto
+
+form(action="/produtos/" + produto.id + "/editar", method="post")
+label
+| Nome:
+input(type="text", name="nome", value=produto.nome, required)
+br
+label
+| Descrição:
+textarea(name="descricao", required)= produto.descricao
+br
+label
+| Preço:
+input(type="number", step="0.01", name="preco", value=produto.preco, required)
+br
+label
+| Desconto (%):
+input(type="number", step="0.01", name="desconto", value=produto.desconto)
+br
+label
+| Categoria:
+select(name="categoriaId", required)
+each categoria in categorias
+option(value=categoria.id, selected=(produto.categoriaId === categoria.id))= categoria.nome
+br
+button(type="submit") Salvar

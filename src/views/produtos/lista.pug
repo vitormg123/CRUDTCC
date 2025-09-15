@@ -1,0 +1,29 @@
+h2 Produtos
+
+if usuario && usuario.tipo === 'admin'
+a(href="/produtos/novo") Novo Produto
+
+table
+tr
+th ID
+th Nome
+th Categoria
+th Preço
+th Desconto
+th Ações
+
+each produto in produtos
+tr
+td= produto.id
+td= produto.nome
+td= produto.Categoria ? produto.Categoria.nome : ''
+td R$ #{produto.preco.toFixed(2)}
+td= produto.desconto + ' %'
+td
+if usuario && usuario.tipo === 'admin'
+a(href="/produtos/" + produto.id + "/editar") Editar
+form(action="/produtos/" + produto.id + "/deletar", method="post", style="display:inline;")
+button(type="submit") Deletar
+else if usuario && usuario.tipo === 'usuario'
+form(action="/carrinho/adicionar/" + produto.id, method="post", style="display:inline;")
+button(type="submit") Adicionar ao Carrinho

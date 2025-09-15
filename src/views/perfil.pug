@@ -1,0 +1,196 @@
+//- Página de Perfil do Usuário
+body(class="perfil-bg")
+  .perfil-container
+    .perfil-header
+      if usuario.fotoPerfil
+        img(src=usuario.fotoPerfil, alt="Foto de Perfil", class="perfil-foto")
+      else
+        img(src="/img/user.png", alt="Foto de Perfil", class="perfil-foto")
+      h2= usuario.nome
+
+    if usuario.tipo === 'admin'
+      div(style="margin: 20px 0;")
+        a(href="/produtos/novo")
+          button(class="admin-btn") Cadastrar Produto
+        a(href="/categorias/nova")
+          button(class="admin-btn") Cadastrar Categoria
+
+    h3 Categorias Cadastradas
+    ul(class="lista-categorias")
+      if typeof categorias !== 'undefined' && categorias.length > 0
+        each cat in categorias
+          li= cat.nome
+      else
+        li Nenhuma categoria cadastrada.
+
+    hr
+
+    h3 Meu Carrinho
+    table
+      tr
+        th Produto
+        th Preço
+        th Desconto
+        th Quantidade
+        th Subtotal
+        th Ações
+
+      if typeof itens !== 'undefined' && itens.length > 0
+        each item in itens
+          tr
+            td= item.produto.nome
+            td R$ #{item.produto.preco.toFixed(2)}
+            td= item.produto.desconto + ' %'
+            td= item.quantidade
+            td R$ #{(item.produto.preco * item.quantidade * (1 - item.produto.desconto/100)).toFixed(2)}
+            td
+              form(action="/carrinho/remover/" + item.produto.id, method="post", style="display:inline;")
+                button(type="submit") Remover
+      else
+        tr
+          td(colspan="6") Seu carrinho está vazio.
+
+      if typeof itens !== 'undefined' && itens.length > 0
+        p
+          strong Total: R$ #{total.toFixed(2)}
+        form(action="/carrinho/finalizar", method="post")
+          button(type="submit") Finalizar Compra
+
+    //- Zona Perigosa
+    .danger-zone-wrapper
+      button(class="danger-toggle", onclick="toggleDangerZone()") &gt;
+    .danger-zone(id="dangerZone")
+      h4 Zona Perigosa
+      form(action="/usuarios/" + (usuario.usuarioId || usuario.id) + "/deletar", method="post", onsubmit="return confirm('Tem certeza que deseja deletar sua conta? Esta ação não pode ser desfeita!');")
+        button(type="submit", class="danger-btn") Deletar Conta
+      a(href="/logout")
+        button(class="danger-btn danger-btn-out") Sair
+
+style.
+  body.perfil-bg {
+    background: #181818 !important;
+    min-height: 100vh;
+    margin: 0;
+  }
+  .perfil-container {
+    background: #222;
+    border-radius: 12px;
+    border: 2.5px solid #b7410e;
+    padding: 30px;
+    max-width: 650px;
+    margin: 50px auto;
+    color: #fff;
+    box-shadow: 0 0 16px #0008;
+    position: relative;
+  }
+  .perfil-header {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+  .perfil-foto {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: #444;
+    border: 2px solid #b7410e;
+    object-fit: cover;
+  }
+  .admin-btn {
+    background: #b7410e;
+    color: #fff;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-right: 10px;
+    transition: background 0.2s;
+  }
+  .admin-btn:hover {
+    background: #d3541a;
+  }
+  .lista-categorias {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 20px 0;
+  }
+  .lista-categorias li {
+    background: #333;
+    color: #fff;
+    margin-bottom: 6px;
+    padding: 8px 12px;
+    border-radius: 4px;
+  }
+  .danger-zone-wrapper {
+    margin-top: 40px;
+    position: relative;
+  }
+  .danger-toggle {
+    background: #b7410e;
+    color: #fff;
+    border: none;
+    border-radius: 50%;
+    width: 38px;
+    height: 38px;
+    font-size: 1.5rem;
+    cursor: pointer;
+    position: absolute;
+    left: -50px;
+    top: 0;
+    transition: background 0.2s;
+    z-index: 2;
+  }
+  .danger-toggle:hover {
+    background: #d3541a;
+  }
+  .danger-zone {
+    display: none;
+    background: #2d2d2d;
+    border: 2px solid #b7410e;
+    border-radius: 8px;
+    padding: 24px 20px 20px 20px;
+    margin-top: 0;
+    margin-left: 0;
+    box-shadow: 0 0 8px #b7410e44;
+    color: #fff;
+    max-width: 350px;
+  }
+  .danger-zone.active {
+    display: block;
+    animation: fadeIn 0.3s;
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .danger-btn {
+    background: #b7410e;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-bottom: 10px;
+    width: 100%;
+    font-weight: bold;
+    font-size: 1rem;
+    transition: background 0.2s;
+  }
+  .danger-btn:hover {
+    background: #d3541a;
+  }
+  .danger-btn-out {
+    background: #444;
+    color: #fff;
+    border: 1.5px solid #b7410e;
+    margin-top: 8px;
+  }
+  .danger-btn-out:hover {
+    background: #222;
+  }
+
+script.
+  function toggleDangerZone() {
+    var dz = document.getElementById('dangerZone');
+    dz.classList.toggle('active');
+  }
