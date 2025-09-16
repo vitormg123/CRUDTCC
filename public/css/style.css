@@ -2,6 +2,7 @@
   --header-h: 80px;
 }
 
+/* Estilo global */
 html, body {
   background: #1a1a1a;
   color: #fff;
@@ -11,6 +12,7 @@ html, body {
   height: 100%;
 }
 
+/* Header */
 header {
   background-color: #cf5209;
   height: var(--header-h);
@@ -22,7 +24,7 @@ header {
 .header-content {
   display: flex;
   align-items: center;
-  justify-content: space-between; /* logo à esquerda, perfil à direita */
+  justify-content: space-between;
   width: 100%;
   max-width: 1200px;
   height: 100%;
@@ -36,6 +38,7 @@ header {
   object-fit: contain;
 }
 
+/* Barra de busca */
 .search-bar {
   flex: 1;
   margin: 0 20px;
@@ -68,9 +71,11 @@ header {
   background: #444;
 }
 
+/* Navegação do header */
 .header-nav {
   display: flex;
   align-items: center;
+  gap: 20px;
 }
 
 .perfil-btn {
@@ -113,6 +118,7 @@ input[type="submit"]:hover {
   background: #444;
 }
 
+/* Menu principal */
 .main-nav {
   background-color: #292929;
   display: flex;
@@ -132,6 +138,7 @@ input[type="submit"]:hover {
   background-color: #444;
 }
 
+/* Main e footer */
 main {
   padding: 30px;
   text-align: center;
@@ -195,4 +202,116 @@ main {
 
 .dropdown:hover .dropbtn {
   background-color: #444;
+}
+
+/* Formulários e botões de produto/categoria */
+
+/* Containers de formulários */
+.page-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: calc(100vh - 60px);
+}
+
+.form-container {
+  background: #222;
+  border: 2px solid #cf5209;
+  border-radius: 8px;
+  padding: 40px 30px;
+  width: 100%;
+  max-width: 500px;
+  text-align: left;
+  color: #fff;
+  position: relative;
+}
+
+h2 {
+  margin-bottom: 30px;
+  color: #b7410e;
+  text-align: center;
+}
+
+input[type="text"],
+input[type="number"],
+textarea,
+select {
+  width: calc(100% - 20px);
+  padding: 10px;
+  border-radius: 6px;
+  border: 1px solid #444;
+  margin-bottom: 20px;
+  font-size: 16px;
+  background: #222;
+  color: #fff;
+  display: block;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  outline: none;
+  border-color: #cf5209;
+  box-shadow: 0 0 8px #cf520955;
+}
+
+/* Botões específicos */
+.categoria-form,
+form.form-container {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 10px;
+}
+
+.admin-btn,
+.btn-primary,
+.btn-finalizar,
+.btn-remover,
+.voltar-btn {
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.admin-btn,
+.btn-primary,
+.btn-finalizar {
+  background: #cf5209;
+  color: #fff;
+  font-weight: bold;
+}
+
+.admin-btn:hover,
+.btn-primary:hover,
+.btn-finalizar:hover {
+  background: #b7410e;
+}
+
+.btn-remover {
+  background: #444;
+  color: #fff;
+}
+
+.btn-remover:hover {
+  background: #333;
+}
+
+.voltar-btn {
+  display: inline-block;
+  margin-bottom: 15px;
+  background: #444;
+  color: #fff;
+  padding: 8px 15px;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.voltar-btn:hover {
+  background: #222;
+}
+
+label {
+  flex-grow: 1;
 }

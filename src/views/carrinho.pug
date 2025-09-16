@@ -1,5 +1,9 @@
 body(class="carrinho-bg")
-  h2(class="carrinho-titulo") Carrinho de Compras
+  .top-bar-wrapper
+    .top-bar
+      a(href="/")
+        button(class="voltar-btn") Voltar
+      h2(class="carrinho-titulo") Carrinho de Compras
 
   .carrinho-container
     if mensagem
@@ -42,11 +46,38 @@ body(class="carrinho-bg")
       min-height: 100vh;
     }
 
+    .top-bar-wrapper {
+      max-width: 800px; /* mesma largura do container */
+      margin: 20px auto 10px auto; /* centraliza horizontalmente e dá espaço acima/abaixo */
+    }
+
+    .top-bar {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start; /* botão à esquerda, título à direita */
+      gap: 20px;
+    }
+
+    .voltar-btn {
+      background: #b7410e;
+      color: #fff;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .voltar-btn:hover {
+      background: #d3541a;
+    }
+
     .carrinho-titulo {
       text-align: center;
       color: #fff;
-      margin-top: 30px;
-      margin-bottom: 20px;
+      margin: 0;
+      font-size: 1.8rem;
+      flex: 1; /* ocupa espaço restante mantendo centralização */
     }
 
     .carrinho-container {
@@ -57,6 +88,7 @@ body(class="carrinho-bg")
       max-width: 800px;
       margin: 0 auto 50px auto;
       box-shadow: 0 0 12px #0007;
+      min-height: 500px; /* altura aumentada */
     }
 
     .mensagem {
@@ -108,4 +140,3 @@ body(class="carrinho-bg")
 
     .btn-finalizar:hover {
       background: #e6661a;
-    }

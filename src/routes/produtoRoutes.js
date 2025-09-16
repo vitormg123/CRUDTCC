@@ -1,5 +1,6 @@
 const express = require('express');
 const produtoController = require('../controllers/produtoController');
+const upload = require('../../config/multer'); // <- import Multer
 const router = express.Router();
 
 // Middleware para proteger rotas de admin
@@ -12,9 +13,12 @@ function requireAdmin(req, res, next) {
 
 router.get('/', produtoController.listarProdutos);
 router.get('/novo', requireAdmin, produtoController.formNovoProduto);
-router.post('/novo', requireAdmin, produtoController.criarProduto);
+
+// Adiciona upload.array para até 10 imagens
+router.post('/novo', requireAdmin, upload.array('imagens', 10), produtoController.criarProduto);
+
 router.get('/:id/editar', requireAdmin, produtoController.formEditarProduto);
-router.post('/:id/editar', requireAdmin, produtoController.editarProduto);
+router.post('/:id/editar', requireAdmin, upload.array('imagens', 10), produtoController.editarProduto);
 router.post('/:id/deletar', requireAdmin, produtoController.deletarProduto);
 
 // Filtros

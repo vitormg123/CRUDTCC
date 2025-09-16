@@ -12,9 +12,28 @@ exports.formNovoProduto = async (req, res) => {
 };
 
 exports.criarProduto = async (req, res) => {
-  const { nome, descricao, preco, desconto, categoriaId, tamanho } = req.body; // adiciona tamanho
-  await Produto.create({ nome, descricao, preco, desconto, categoriaId, tamanho });
-  res.redirect('/produtos');
+  try {
+    const { nome, descricao, preco, desconto, categoriaId, tamanho } = req.body;
+
+    // Pega os arquivos enviados via Multer
+    const imagens = req.files ? req.files.map(file => 'uploads/' + file.filename) : [];
+
+    await Produto.create({
+      nome,
+      descricao,
+      preco,
+      desconto: desconto || 0,
+      categoriaId,
+      tamanho,
+      imagens: JSON.stringify(imagens) // Salva as imagens em formato JSON
+    });
+
+    req.session.mensagemSucesso = 'Produto cadastrado com sucesso!';
+    res.redirect('/produtos');
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Erro ao cadastrar produto');
+  }
 };
 
 exports.formEditarProduto = async (req, res) => {
@@ -24,12 +43,19 @@ exports.formEditarProduto = async (req, res) => {
 };
 
 exports.editarProduto = async (req, res) => {
-  const { nome, descricao, preco, desconto, categoriaId, tamanho } = req.body; // adiciona tamanho
-  await Produto.update(
-    { nome, descricao, preco, desconto, categoriaId, tamanho },
-    { where: { id: req.params.id } }
-  );
-  res.redirect('/produtos');
+  try {
+    const { nome, descricao, preco, desconto, categoriaId, tamanho } = req.body;
+    const imagens = req.files ? req.files.map(file => 'uploads/' + file.filename) : [];
+
+    const updateData = { nome, descricao, preco, desconto: desconto || 0, categoriaId, tamanho };
+    if (imagens.length > 0) updateData.imagens = JSON.stringify(imagens);
+
+    await Produto.update(updateData, { where: { id: req.params.id } });
+    res.redirect('/produtos');
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Erro ao editar produto');
+  }
 };
 
 exports.deletarProduto = async (req, res) => {

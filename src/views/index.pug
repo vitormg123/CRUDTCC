@@ -24,17 +24,19 @@ html(lang="pt-br")
               button Cadastrar-se
           else
             if usuario.tipo === 'admin'
+              a(href="/categorias/nova")
+                button Cadastrar Categoria
+              a(href="/produtos/novo")
+                button Cadastrar Produto
+              // botão de perfil sempre por último
               a(href="/perfil-admin")
                 button.perfil-btn
                   if usuario.fotoPerfil
                     img(src=usuario.fotoPerfil, alt="Perfil", class="perfil-icon")
                   else
                     img(src="/img/user.png", alt="Perfil", class="perfil-icon")
-              a(href="/categorias/nova")
-                button Cadastrar Categoria
-              a(href="/produtos/novo")
-                button Cadastrar Produto
             else
+              // botão de perfil sempre por último
               a(href="/perfil")
                 button.perfil-btn
                   if usuario.fotoPerfil
