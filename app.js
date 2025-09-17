@@ -2,7 +2,7 @@ const express = require('express');
 const session = require('express-session');
 const SequelizeStore = require('connect-session-sequelize')(session.Store);
 const path = require('path');
-const { sequelize, syncModels, Usuario, Categoria } = require('./src/models');
+const { sequelize, syncModels, Usuario, Categoria, Produto } = require('./src/models');
 
 const app = express();
 const PORT = 3000;
@@ -49,9 +49,6 @@ function requireAuth(req, res, next) {
   return res.redirect('/login');
 }
 
-// Libera cadastro se não há usuários ou exige admin
-
-
 // Rotas
 app.use(authRoutes);
 
@@ -76,9 +73,9 @@ const { temMaisDeUmUsuario } = require('./src/services/usuarioService');
 // Rota principal
 app.get('/', async (req, res) => {
   const maisDeUmUsuario = await temMaisDeUmUsuario();
-  const categorias = await Categoria.findAll(); // envia categorias para o index.ejs
+  const categorias = await Categoria.findAll();
+  const produtos = await Produto.findAll({ include: Categoria });
 
-  // Captura mensagem de sucesso da sessão (opcional)
   const mensagemSucesso = req.session.mensagemSucesso;
   req.session.mensagemSucesso = null;
 
@@ -86,6 +83,7 @@ app.get('/', async (req, res) => {
     usuario: req.session, 
     maisDeUmUsuario, 
     categorias, 
+    produtos,   // produtos enviados para o index
     mensagemSucesso 
   });
 });

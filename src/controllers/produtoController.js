@@ -28,8 +28,11 @@ exports.criarProduto = async (req, res) => {
       imagens: JSON.stringify(imagens) // Salva as imagens em formato JSON
     });
 
+    // Mensagem de sucesso
     req.session.mensagemSucesso = 'Produto cadastrado com sucesso!';
-    res.redirect('/produtos');
+
+    // Redireciona para a página inicial
+    res.redirect('/');
   } catch (err) {
     console.error(err);
     res.status(500).send('Erro ao cadastrar produto');
@@ -51,7 +54,10 @@ exports.editarProduto = async (req, res) => {
     if (imagens.length > 0) updateData.imagens = JSON.stringify(imagens);
 
     await Produto.update(updateData, { where: { id: req.params.id } });
-    res.redirect('/produtos');
+
+    // Mensagem de sucesso
+    req.session.mensagemSucesso = 'Produto editado com sucesso!';
+    res.redirect('/');
   } catch (err) {
     console.error(err);
     res.status(500).send('Erro ao editar produto');
@@ -59,8 +65,16 @@ exports.editarProduto = async (req, res) => {
 };
 
 exports.deletarProduto = async (req, res) => {
-  await Produto.destroy({ where: { id: req.params.id } });
-  res.redirect('/produtos');
+  try {
+    await Produto.destroy({ where: { id: req.params.id } });
+
+    // Mensagem de sucesso
+    req.session.mensagemSucesso = 'Produto deletado com sucesso!';
+    res.redirect('/');
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Erro ao deletar produto');
+  }
 };
 
 exports.filtrarPorCategoria = async (req, res) => {
@@ -69,7 +83,7 @@ exports.filtrarPorCategoria = async (req, res) => {
 };
 
 exports.filtrarNovidades = async (req, res) => {
-  const ontem = new Date(Date.now() - 24*60*60*1000);
+  const ontem = new Date(Date.now() - 24 * 60 * 60 * 1000);
   const produtos = await Produto.findAll({ where: { criadoEm: { [Op.gte]: ontem } }, include: Categoria });
   res.render('produtos/lista', { produtos, usuario: req.session });
 };

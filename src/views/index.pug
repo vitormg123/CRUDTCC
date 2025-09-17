@@ -28,7 +28,6 @@ html(lang="pt-br")
                 button Cadastrar Categoria
               a(href="/produtos/novo")
                 button Cadastrar Produto
-              // botão de perfil sempre por último
               a(href="/perfil-admin")
                 button.perfil-btn
                   if usuario.fotoPerfil
@@ -36,7 +35,6 @@ html(lang="pt-br")
                   else
                     img(src="/img/user.png", alt="Perfil", class="perfil-icon")
             else
-              // botão de perfil sempre por último
               a(href="/perfil")
                 button.perfil-btn
                   if usuario.fotoPerfil
@@ -51,7 +49,6 @@ html(lang="pt-br")
           each cat in categorias
             a(href="/produtos/categoria/#{cat.id}")= cat.nome
 
-      //- Mover os botões Novidades, Descontos e Populares para fora da dropdown
       a(href="/produtos/novidades")
         button Novidades
       a(href="/produtos/descontos")
@@ -60,10 +57,23 @@ html(lang="pt-br")
         button Populares
 
     main
-      h1 Bem-vindo à Heranças do Sul
-      p Seu e-commerce de botas!
-      //- Produtos e filtros serão exibidos aqui
+      if mensagemSucesso
+        .alert-success= mensagemSucesso
 
-    //- Barra laranja fixa no rodapé
+      //- Grid de produtos
+      .produtos-grid
+        each produto in produtos
+          .produto-card
+            img(src=produto.imagens && JSON.parse(produto.imagens)[0] || '/img/placeholder.png', alt=produto.nome)
+            h3= produto.nome
+            p.preco R$ #{produto.preco.toFixed(2)}
+            if produto.desconto > 0
+              p.desconto Desconto: #{produto.desconto} %
+            form(action="/carrinho/adicionar/" + produto.id, method="post", style="display:flex; gap:10px; justify-content:center;")
+              button(type="submit") Adicionar ao Carrinho
+              if usuario && usuario.tipo === 'admin'
+                form(action="/produtos/deletar/" + produto.id, method="post")
+                  button(type="submit", class="admin-btn") Excluir Produto
+
     .footer-bar
       | 48 98868-6376

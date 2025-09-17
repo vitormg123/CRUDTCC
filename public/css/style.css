@@ -2,7 +2,9 @@
   --header-h: 80px;
 }
 
-/* Estilo global */
+/* =========================
+   Geral e Body
+   ========================= */
 html, body {
   background: #1a1a1a;
   color: #fff;
@@ -12,7 +14,9 @@ html, body {
   height: 100%;
 }
 
-/* Header */
+/* =========================
+   Header
+   ========================= */
 header {
   background-color: #cf5209;
   height: var(--header-h);
@@ -71,7 +75,7 @@ header {
   background: #444;
 }
 
-/* Navegação do header */
+/* Navegação */
 .header-nav {
   display: flex;
   align-items: center;
@@ -102,6 +106,7 @@ header {
   object-fit: cover;
 }
 
+/* Botões gerais */
 button,
 input[type="submit"] {
   background: #333;
@@ -118,7 +123,9 @@ input[type="submit"]:hover {
   background: #444;
 }
 
-/* Menu principal */
+/* =========================
+   Menu Principal
+   ========================= */
 .main-nav {
   background-color: #292929;
   display: flex;
@@ -138,28 +145,6 @@ input[type="submit"]:hover {
   background-color: #444;
 }
 
-/* Main e footer */
-main {
-  padding: 30px;
-  text-align: center;
-}
-
-.footer-bar {
-  width: 100%;
-  background-color: #cf5209;
-  color: #fff;
-  text-align: center;
-  padding: 12px 0;
-  font-size: 18px;
-  font-weight: bold;
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  z-index: 100;
-  cursor: pointer;
-}
-
-/* Dropdown */
 .dropdown {
   position: relative;
   display: inline-block;
@@ -204,39 +189,70 @@ main {
   background-color: #444;
 }
 
-/* Formulários e botões de produto/categoria */
-
-/* Containers de formulários */
-.page-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: calc(100vh - 60px);
+/* =========================
+   Main
+   ========================= */
+main {
+  padding: 30px;
+  text-align: center;
 }
 
+/* =========================
+   Footer
+   ========================= */
+.footer-bar {
+  width: 100%;
+  background-color: #cf5209;
+  color: #fff;
+  text-align: center;
+  padding: 12px 0;
+  font-size: 18px;
+  font-weight: bold;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  z-index: 100;
+  cursor: pointer;
+}
+
+/* =========================
+   Formulários
+   ========================= */
 .form-container {
   background: #222;
   border: 2px solid #cf5209;
   border-radius: 8px;
-  padding: 40px 30px;
+  padding: 30px 25px;
   width: 100%;
-  max-width: 500px;
-  text-align: left;
+  max-width: 600px;
   color: #fff;
-  position: relative;
+  text-align: left;
+  box-shadow: 0 0 15px #0008;
+  margin: 0 auto;
 }
 
 h2 {
-  margin-bottom: 30px;
+  margin-bottom: 25px;
   color: #b7410e;
   text-align: center;
+}
+
+label {
+  display: inline-block;
+  margin-bottom: 5px;
+  font-weight: bold;
+  text-align: left;
+  width: 100%;
+  margin-top: 10px;
 }
 
 input[type="text"],
 input[type="number"],
 textarea,
-select {
-  width: calc(100% - 20px);
+select,
+input[type="file"] {
+  width: 100%;
+  max-width: 600px;
   padding: 10px;
   border-radius: 6px;
   border: 1px solid #444;
@@ -245,6 +261,13 @@ select {
   background: #222;
   color: #fff;
   display: block;
+  margin-left: auto;
+  margin-right: auto;
+  box-sizing: border-box;
+}
+
+textarea {
+  resize: vertical;
 }
 
 input:focus,
@@ -255,63 +278,146 @@ select:focus {
   box-shadow: 0 0 8px #cf520955;
 }
 
-/* Botões específicos */
-.categoria-form,
-form.form-container {
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  gap: 10px;
+.voltar-btn {
+  display: inline-block;
+  width: auto;
+  padding: 12px 20px;
+  font-size: 16px;
+  font-weight: bold;
+  border-radius: 6px;
+  text-align: center;
+  cursor: pointer;
+  transition: background 0.2s;
+  background: #cf5209;
+  color: #fff;
+  border: none;
+  margin-bottom: 20px;
+}
+
+.voltar-btn:hover {
+  background: #b7410e;
 }
 
 .admin-btn,
-.btn-primary,
-.btn-finalizar,
-.btn-remover,
-.voltar-btn {
-  border: none;
+.btn-primary {
+  width: auto;
+  min-width: 120px;
+  display: block;
+  margin: 20px 0 0 auto;
+  font-size: 16px;
+  padding: 12px 20px;
   border-radius: 6px;
+  font-weight: bold;
+  text-align: center;
+  cursor: pointer;
+  transition: background 0.2s;
+  background: #cf5209;
+  color: #fff;
+  border: none;
+}
+
+.admin-btn:hover,
+.btn-primary:hover {
+  background: #b7410e;
+}
+
+/* =========================
+   Grid de Produtos
+   ========================= */
+.produtos-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  max-width: 1200px;
+  margin: 30px auto;
+  padding: 0;
+}
+
+.produto-card {
+  background-color: #fff;
+  color: #000;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 15px;
+  text-align: center;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.produto-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 5px 15px #0002;
+}
+
+.produto-card img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  margin-bottom: 10px;
+  border-radius: 4px;
+}
+
+.produto-card h3 {
+  font-size: 18px;
+  margin: 5px 0;
+}
+
+.produto-card p {
+  margin: 3px 0;
+}
+
+.produto-card .preco {
+  font-weight: bold;
+  color: #cf5209;
+}
+
+.produto-card .desconto {
+  color: red;
+  font-weight: bold;
+}
+
+.produto-card form button {
+  margin-top: 8px;
+  padding: 8px 12px;
+  border-radius: 6px;
+  background-color: #cf5209;
+  color: #fff;
+  border: none;
   cursor: pointer;
   transition: background 0.2s;
 }
 
-.admin-btn,
-.btn-primary,
-.btn-finalizar {
-  background: #cf5209;
-  color: #fff;
-  font-weight: bold;
+.produto-card form button:hover {
+  background-color: #b7410e;
 }
 
-.admin-btn:hover,
-.btn-primary:hover,
-.btn-finalizar:hover {
-  background: #b7410e;
+/* Mensagem de sucesso */
+.alert-success {
+  background-color: #d4edda;
+  color: #155724;
+  border: 1px solid #c3e6cb;
+  padding: 10px;
+  border-radius: 4px;
+  margin: 10px 0;
+  text-align: center;
 }
 
-.btn-remover {
-  background: #444;
-  color: #fff;
+/* =========================
+   Responsividade
+   ========================= */
+@media (max-width: 1024px) {
+  .produtos-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
 }
 
-.btn-remover:hover {
-  background: #333;
+@media (max-width: 768px) {
+  .produtos-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 
-.voltar-btn {
-  display: inline-block;
-  margin-bottom: 15px;
-  background: #444;
-  color: #fff;
-  padding: 8px 15px;
-  text-decoration: none;
-  font-weight: bold;
-}
-
-.voltar-btn:hover {
-  background: #222;
-}
-
-label {
-  flex-grow: 1;
+@media (max-width: 480px) {
+  .produtos-grid {
+    grid-template-columns: 1fr;
+  }
 }
