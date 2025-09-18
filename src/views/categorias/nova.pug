@@ -10,7 +10,8 @@ html(lang="pt-br")
     .page-container
       .form-container
         h2 Nova Categoria
-        a(href="/", class="voltar-btn") Voltar
+        button.voltar-btn(type="button", onclick="window.location.href='/'") Voltar
+
         form(action="/categorias/nova", method="post", class="categoria-form")
           label Nome:
           input(type="text", name="nome", placeholder="Nome da categoria", required)

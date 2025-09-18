@@ -10,7 +10,8 @@ html(lang="pt-br")
     .page-container
       .form-container
         h2 Novo Produto
-        a(href="/", class="voltar-btn") Voltar
+        button.voltar-btn(type="button", onclick="window.location.href='/'") Voltar
+
 
 
         form(action="/produtos/novo", method="post", enctype="multipart/form-data")

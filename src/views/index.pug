@@ -11,8 +11,7 @@ html(lang="pt-br")
       .header-content
         img(src="/img/logo.png", alt="Logo Heranças do Sul", class="logo-header")
         .search-bar
-          input(type="text", placeholder="Pesquisar produtos...")
-          button Pesquisar
+          input#searchInput(type="text", placeholder="Pesquisar produtos...")
         nav.header-nav
           a(href="/carrinho")
             button Carrinho
@@ -61,19 +60,47 @@ html(lang="pt-br")
         .alert-success= mensagemSucesso
 
       //- Grid de produtos
-      .produtos-grid
+      .produtos-grid#produtosGrid
         each produto in produtos
-          .produto-card
+          a.produto-card(href="/produtos/" + produto.id, data-nome=produto.nome.toLowerCase())
             img(src=produto.imagens && JSON.parse(produto.imagens)[0] || '/img/placeholder.png', alt=produto.nome)
             h3= produto.nome
             p.preco R$ #{produto.preco.toFixed(2)}
             if produto.desconto > 0
               p.desconto Desconto: #{produto.desconto} %
-            form(action="/carrinho/adicionar/" + produto.id, method="post", style="display:flex; gap:10px; justify-content:center;")
-              button(type="submit") Adicionar ao Carrinho
-              if usuario && usuario.tipo === 'admin'
-                form(action="/produtos/deletar/" + produto.id, method="post")
-                  button(type="submit", class="admin-btn") Excluir Produto
+
+      // Mensagem caso não encontre produtos
+      p#noResults(style="display:none; text-align:center; margin-top:20px; font-size:1.2rem; color:#b7410e;")
+        | Nenhum Produto Encontrado
 
     .footer-bar
       | 48 98868-6376
+
+    script.
+      const searchInput = document.getElementById("searchInput");
+      const produtosGrid = document.getElementById("produtosGrid");
+      const noResults = document.getElementById("noResults");
+      const produtos = produtosGrid ? produtosGrid.getElementsByClassName("produto-card") : [];
+
+      if (searchInput) {
+        searchInput.addEventListener("input", function() {
+          const searchTerm = this.value.toLowerCase().trim();
+          let found = false;
+
+          Array.from(produtos).forEach(produto => {
+            const nome = produto.getAttribute("data-nome");
+            if (nome.includes(searchTerm)) {
+              produto.style.display = "block";
+              found = true;
+            } else {
+              produto.style.display = "none";
+            }
+          });
+
+          if (!found && searchTerm !== "") {
+            noResults.style.display = "block";
+          } else {
+            noResults.style.display = "none";
+          }
+        });
+      }

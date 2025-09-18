@@ -27,7 +27,7 @@ header {
 
 .header-content {
   display: flex;
-  align-items: center;
+  align-items: center;   /* alinhamento vertical */
   justify-content: space-between;
   width: 100%;
   max-width: 1200px;
@@ -42,40 +42,32 @@ header {
   object-fit: contain;
 }
 
-/* Barra de busca */
+/* =========================
+   Barra de busca
+   ========================= */
 .search-bar {
   flex: 1;
   margin: 0 20px;
   display: flex;
-  align-items: center;
+  align-items: center;     /* centraliza verticalmente */
+  justify-content: center; /* centraliza horizontalmente entre logo e nav */
+  max-width: 500px;
 }
 
 .search-bar input[type="text"] {
   flex: 1;
   padding: 10px 16px;
-  border-radius: 6px 0 0 6px;
+  border-radius: 6px;
   border: 1px solid #444;
   background: #222;
   color: #fff;
   font-size: 16px;
+  box-sizing: border-box;
 }
 
-.search-bar button {
-  padding: 10px 20px;
-  border-radius: 0 6px 6px 0;
-  border: none;
-  background: #333;
-  color: #fff;
-  cursor: pointer;
-  font-size: 16px;
-  transition: background 0.2s;
-}
-
-.search-bar button:hover {
-  background: #444;
-}
-
-/* Navegação */
+/* =========================
+   Navegação
+   ========================= */
 .header-nav {
   display: flex;
   align-items: center;
@@ -341,7 +333,13 @@ select:focus {
   padding: 15px;
   text-align: center;
   transition: transform 0.2s, box-shadow 0.2s;
+  text-decoration: none; /* remove sublinhado */
+  min-height: 200px; /* altura mínima */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between; /* mantém os elementos distribuídos */
 }
+
 
 .produto-card:hover {
   transform: translateY(-5px);
@@ -390,7 +388,10 @@ select:focus {
   background-color: #b7410e;
 }
 
-/* Mensagem de sucesso */
+
+/* =========================
+   Mensagens
+   ========================= */
 .alert-success {
   background-color: #d4edda;
   color: #155724;

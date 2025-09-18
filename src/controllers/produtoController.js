@@ -103,3 +103,23 @@ exports.buscarPorNome = async (req, res) => {
   const produtos = await Produto.findAll({ where: { nome: { [Op.like]: `%${q}%` } }, include: Categoria });
   res.render('produtos/lista', { produtos, usuario: req.session });
 };
+
+exports.verDetalhesProduto = async (req, res) => {
+  const produtoId = req.params.id;
+
+  try {
+    const produto = await Produto.findOne({
+      where: { id: produtoId },
+      include: Categoria
+    });
+
+    if (!produto) {
+      return res.status(404).send("Produto não encontrado");
+    }
+
+    res.render('produtoDetalhes', { produto, usuario: req.session });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Erro ao buscar produto");
+  }
+};

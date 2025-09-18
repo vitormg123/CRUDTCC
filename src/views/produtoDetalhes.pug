@@ -1,0 +1,46 @@
+doctype html
+html(lang="pt-br")
+  head
+    meta(charset="UTF-8")
+    meta(name="viewport", content="width=device-width, initial-scale=1.0")
+    title= produto.nome
+    link(rel="stylesheet", href="/css/style.css")
+  body
+    header
+      .header-content
+        img(src="/img/logo.png", alt="Logo Heranças do Sul", class="logo-header")
+        nav.header-nav
+          a(href="/")
+            button Voltar
+
+    main
+      .produto-detalhes
+        h1= produto.nome
+        p.preco R$ #{produto.preco.toFixed(2)}
+        if produto.desconto > 0
+          p.desconto Desconto: #{produto.desconto} %
+        if produto.Categoria
+          p Categoria: #{produto.Categoria.nome}
+        p Tamanho: #{produto.tamanho}
+        p Descrição: #{produto.descricao}
+
+        // Carousel de imagens
+        if produto.imagens
+          - const imagens = JSON.parse(produto.imagens);
+          if imagens.length
+            .carousel
+              each imgSrc, index in imagens
+                img(src='/' + imgSrc, alt=produto.nome + " " + (index + 1), class="produto-img")
+
+        // Botões de ação
+        form(action="/carrinho/adicionar/" + produto.id, method="post", style="margin-top:20px;")
+          button(type="submit") Adicionar ao Carrinho
+
+        if usuario && usuario.tipo === 'admin'
+          form(action="/produtos/deletar/" + produto.id, method="post", style="margin-top:10px;")
+            button(type="submit", class="admin-btn") Excluir Produto
+          a(href="/produtos/" + produto.id + "/editar")
+            button(class="admin-btn", style="margin-top:10px;") Editar Produto
+
+    .footer-bar
+      | 48 98868-6376

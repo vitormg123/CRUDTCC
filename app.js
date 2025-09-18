@@ -24,6 +24,8 @@ app.use(session({
 }));
 sessionStore.sync();
 
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
 // Rotas
 const usuarioRoutes = require('./src/routes/usuarioRoutes');
 const categoriaRoutes = require('./src/routes/categoriaRoutes');

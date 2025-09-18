@@ -21,6 +21,9 @@ router.get('/:id/editar', requireAdmin, produtoController.formEditarProduto);
 router.post('/:id/editar', requireAdmin, upload.array('imagens', 10), produtoController.editarProduto);
 router.post('/:id/deletar', requireAdmin, produtoController.deletarProduto);
 
+// Nova rota: detalhes do produto
+router.get('/:id', produtoController.verDetalhesProduto);
+
 // Filtros
 router.get('/categoria/:categoriaId', produtoController.filtrarPorCategoria);
 router.get('/novidades', produtoController.filtrarNovidades);
