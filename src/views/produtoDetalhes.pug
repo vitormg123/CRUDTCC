@@ -6,41 +6,42 @@ html(lang="pt-br")
     title= produto.nome
     link(rel="stylesheet", href="/css/style.css")
   body
-    header
-      .header-content
-        img(src="/img/logo.png", alt="Logo Heranças do Sul", class="logo-header")
-        nav.header-nav
-          a(href="/")
-            button Voltar
+    
+    // Botão Voltar fora do container
+    a(href="/", style="display: inline-block; margin: 20px;")
+      button(style="background-color: #b7410e; color: #fff; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer;") Voltar
 
     main
-      .produto-detalhes
-        h1= produto.nome
-        p.preco R$ #{produto.preco.toFixed(2)}
-        if produto.desconto > 0
-          p.desconto Desconto: #{produto.desconto} %
-        if produto.Categoria
-          p Categoria: #{produto.Categoria.nome}
-        p Tamanho: #{produto.tamanho}
-        p Descrição: #{produto.descricao}
+      .produto-detalhes-container(style="background-color: #b7410e; padding: 20px; border-radius: 10px; max-width: 1000px; margin: 0 auto; color: #fff;")
+        
+        .produto-container
+          
+          // Carousel de imagens
+          if produto.imagens
+            - const imagens = JSON.parse(produto.imagens);
+            if imagens.length
+              .carousel(style="display: flex; overflow-x: auto; gap: 10px; margin-bottom: 20px;")
+                each imgSrc, index in imagens
+                  img(src='/' + imgSrc, alt=produto.nome + " " + (index + 1), class="produto-img", style="width: 250px; height: 250px; object-fit: cover; border-radius: 5px;")
 
-        // Carousel de imagens
-        if produto.imagens
-          - const imagens = JSON.parse(produto.imagens);
-          if imagens.length
-            .carousel
-              each imgSrc, index in imagens
-                img(src='/' + imgSrc, alt=produto.nome + " " + (index + 1), class="produto-img")
+          // Informações do produto
+          .produto-info(style="margin-bottom: 20px;")
+            h1(style="margin-bottom: 10px;")= produto.nome
+            p.preco R$ #{produto.preco.toFixed(2)}
+            if produto.desconto > 0
+              p.desconto Desconto: #{produto.desconto} %
+            if produto.Categoria
+              p Categoria: #{produto.Categoria.nome}
+            p Tamanho: #{produto.tamanho}
+            p Descrição: #{produto.descricao}
 
-        // Botões de ação
-        form(action="/carrinho/adicionar/" + produto.id, method="post", style="margin-top:20px;")
-          button(type="submit") Adicionar ao Carrinho
+          // Botões de ação
+          .produto-acoes(style="display: flex; gap: 10px; flex-wrap: wrap;")
+            form(action="/carrinho/adicionar/" + produto.id, method="post")
+              button(type="submit", class="btn-carrinho", style="background-color: #fff; color: #b7410e; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer;") Adicionar ao Carrinho
 
-        if usuario && usuario.tipo === 'admin'
-          form(action="/produtos/deletar/" + produto.id, method="post", style="margin-top:10px;")
-            button(type="submit", class="admin-btn") Excluir Produto
-          a(href="/produtos/" + produto.id + "/editar")
-            button(class="admin-btn", style="margin-top:10px;") Editar Produto
-
-    .footer-bar
-      | 48 98868-6376
+            if usuario && usuario.tipo === 'admin'
+              form(action="/produtos/deletar/" + produto.id, method="post")
+                button(type="submit", class="btn-deletar", style="background-color: #fff; color: red; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer;") Excluir Produto
+              a(href="/produtos/" + produto.id + "/editar")
+                button(class="btn-editar", style="background-color: #fff; color: #000; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer;") Editar Produto

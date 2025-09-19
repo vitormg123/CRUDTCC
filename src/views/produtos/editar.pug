@@ -1,26 +1,39 @@
-h2 Editar Produto
+doctype html
+html(lang="pt-br")
+  head
+    meta(charset="UTF-8")
+    meta(name="viewport", content="width=device-width, initial-scale=1.0")
+    title Editar Produto
+    link(rel="stylesheet", href="/css/style.css")
 
-form(action="/produtos/" + produto.id + "/editar", method="post")
-label
-| Nome:
-input(type="text", name="nome", value=produto.nome, required)
-br
-label
-| Descrição:
-textarea(name="descricao", required)= produto.descricao
-br
-label
-| Preço:
-input(type="number", step="0.01", name="preco", value=produto.preco, required)
-br
-label
-| Desconto (%):
-input(type="number", step="0.01", name="desconto", value=produto.desconto)
-br
-label
-| Categoria:
-select(name="categoriaId", required)
-each categoria in categorias
-option(value=categoria.id, selected=(produto.categoriaId === categoria.id))= categoria.nome
-br
-button(type="submit") Salvar
+  body
+    .page-container
+      .form-container
+        h2 Editar Produto
+        button.voltar-btn(type="button", onclick="window.location.href='/'") Voltar
+
+        form(action="/produtos/" + produto.id + "/editar", method="post", enctype="multipart/form-data")
+          label Nome:
+          input(type="text", name="nome", required, value=produto.nome)
+
+          label Descrição:
+          textarea(name="descricao", required)= produto.descricao
+
+          label Preço:
+          input(type="number", step="0.01", name="preco", required, value=produto.preco)
+
+          label Desconto (%):
+          input(type="number", step="0.01", name="desconto", value=produto.desconto)
+
+          label(for="tamanho") Tamanho:
+          input(type="text", id="tamanho", name="tamanho", placeholder="Ex: 37, 38, 39...", required, value=produto.tamanho)
+
+          label Categoria:
+          select(name="categoriaId", required)
+            each categoria in categorias
+              option(value=categoria.id, selected=(produto.categoriaId === categoria.id))= categoria.nome
+
+          label Imagens do Produto (até 10):
+          input(type="file", name="imagens", accept="image/*", multiple)
+
+          button(type="submit", class="btn-primary") Salvar
