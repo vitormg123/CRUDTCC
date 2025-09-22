@@ -1,27 +1,28 @@
 const express = require('express');
 const produtoController = require('../controllers/produtoController');
-const upload = require('../../config/multer'); // <- import Multer
+const upload = require('../../config/multer'); 
 const router = express.Router();
 
 // Middleware para proteger rotas de admin
 function requireAdmin(req, res, next) {
-	if (req.session && req.session.tipo === 'admin') {
-		return next();
-	}
-	return res.redirect('/login');
+  if (req.session && req.session.tipo === 'admin') {
+    return next();
+  }
+  return res.redirect('/login');
 }
 
+// Rotas principais
 router.get('/', produtoController.listarProdutos);
 router.get('/novo', requireAdmin, produtoController.formNovoProduto);
-
-// Adiciona upload.array para até 10 imagens
 router.post('/novo', requireAdmin, upload.array('imagens', 10), produtoController.criarProduto);
 
 router.get('/:id/editar', requireAdmin, produtoController.formEditarProduto);
 router.post('/:id/editar', requireAdmin, upload.array('imagens', 10), produtoController.editarProduto);
+
+// 🔥 Rota de deletar precisa vir antes da rota GET '/:id'
 router.post('/:id/deletar', requireAdmin, produtoController.deletarProduto);
 
-// Nova rota: detalhes do produto
+// Rota de detalhes do produto
 router.get('/:id', produtoController.verDetalhesProduto);
 
 // Filtros

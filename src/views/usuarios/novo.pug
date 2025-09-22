@@ -1,75 +1,85 @@
-.form-bg
-  .form-box
-    h2 Novo Usuário
-    form(action="/usuarios/novo", method="post")
-      label Nome:
-      br
-      input(type="text", name="nome", required)
-      br
-      label Email:
-      br
-      input(type="email", name="email", required)
-      br
-      label Senha:
-      br
-      input(type="password", name="senha", required)
-      br
-      label Tipo:
-      br
-      select(name="tipo")
-        option(value="usuario") Usuário
-        option(value="admin") Administrador
-      button(type="submit") Cadastrar
-style.
-  html, body {
-    background: #1a1a1a !important;
-    min-height: 100vh;
-    height: 100%;
-  }
-  .form-bg {
-    min-height: 100vh;
-    min-width: 100vw;
-    width: 100vw;
-    height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: #1a1a1a;
-  }
-  .form-box {
-    background: #222;
-    border: 2.5px solid #b7410e;
-    border-radius: 10px;
-    padding: 40px 32px 32px 32px;
-    box-shadow: 0 2px 16px #0005;
-    min-width: 320px;
-    color: #fff;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-  .form-box h2 {
-    margin-bottom: 24px;
-    color: #fff;
-  }
-  .form-box label {
-    display: block;
-    margin-bottom: 16px;
-    font-size: 1.05em;
-  }
-  .form-box input, .form-box select {
-    width: 100%;
-    padding: 8px;
-    margin-top: 4px;
-    border-radius: 4px;
-    border: 1px solid #444;
-    background: #333;
-    color: #fff;
-    font-size: 1em;
-    box-sizing: border-box;
-  }
-  .form-box button {
-    width: 100%;
-    margin-top: 10px;
-    font-size: 1.1em;
-  }
+//- novoUsuario.pug
+doctype html
+html(lang="pt-br")
+  head
+    meta(charset="UTF-8")
+    meta(name="viewport", content="width=device-width, initial-scale=1.0")
+    title Novo Usuário - Heranças do Sul
+    link(rel="stylesheet", href="/css/style.css")
+
+  body
+    // Botão Voltar fora do container, acima à esquerda
+    a(href="/", style="display: inline-block; margin: 20px;")
+      button(style="background-color: #b7410e; color: #fff; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer;") Voltar
+
+    .form-bg
+      .form-box
+        h2 Novo Usuário
+        form(action="/usuarios/novo", method="post")
+          label Nome:
+          input(type="text", name="nome", required)
+          label Email:
+          input(type="email", name="email", required)
+          label Senha:
+          input(type="password", name="senha", required)
+          label Tipo:
+          select(name="tipo")
+            option(value="usuario") Usuário
+            option(value="admin") Administrador
+          button(type="submit") Cadastrar
+
+    style.
+      html, body {
+        background: #1a1a1a !important;
+        min-height: 100vh;
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+      .form-bg {
+        min-height: 100vh;
+        min-width: 100vw;
+        width: 100vw;
+        height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #1a1a1a;
+      }
+      .form-box {
+        background: #222;
+        border: 2.5px solid #b7410e;
+        border-radius: 10px;
+        padding: 40px 32px 32px 32px;
+        box-shadow: 0 2px 16px #0005;
+        min-width: 320px;
+        color: #fff;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+      .form-box h2 {
+        margin-bottom: 24px;
+        color: #fff;
+      }
+      .form-box label {
+        display: block;
+        margin-bottom: 16px;
+        font-size: 1.05em;
+      }
+      .form-box input, .form-box select {
+        width: 100%;
+        padding: 8px;
+        margin-top: 4px;
+        border-radius: 4px;
+        border: 1px solid #444;
+        background: #333;
+        color: #fff;
+        font-size: 1em;
+        box-sizing: border-box;
+      }
+      .form-box button {
+        width: 100%;
+        margin-top: 10px;
+        font-size: 1.1em;
+      }

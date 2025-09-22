@@ -7,6 +7,10 @@ html(lang="pt-br")
     link(rel="stylesheet", href="/css/style.css")
 
   body
+    // Botão Voltar fora do container, acima à esquerda
+    a(href="/", style="display: inline-block; margin: 20px;")
+      button(style="background-color: #b7410e; color: #fff; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer;") Voltar
+
     .form-bg
       .form-box
         h2 Login
@@ -17,14 +21,10 @@ html(lang="pt-br")
         form(action="/login", method="post")
           label
             | Email:
-          br
           input(type="email", name="email", required)
-          br
           label
             | Senha:
-          br
           input(type="password", name="senha", required)
-          br
           button(type="submit") Entrar
 
     style.
