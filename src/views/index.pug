@@ -46,13 +46,13 @@ html(lang="pt-br")
         button.dropbtn Categorias
         .dropdown-content
           each cat in categorias
-            a(href="/produtos/categoria/#{cat.id}")= cat.nome
+            a(href="#")= cat.nome
 
-      a(href="/produtos/novidades")
+      a(href="#")
         button Novidades
-      a(href="/produtos/descontos")
+      a(href="#")
         button Descontos
-      a(href="/produtos/populares")
+      a(href="#")
         button Populares
 
     main
@@ -62,7 +62,14 @@ html(lang="pt-br")
       //- Grid de produtos
       .produtos-grid#produtosGrid
         each produto in produtos
-          a.produto-card(href="/produtos/" + produto.id, data-nome=produto.nome.toLowerCase())
+          a.produto-card(
+            href="/produtos/" + produto.id, 
+            data-nome=produto.nome.toLowerCase(), 
+            data-categoria=produto.Categoria ? produto.Categoria.nome.toLowerCase() : "",
+            data-desconto=produto.desconto,
+            data-criado=produto.criadoEm ? produto.criadoEm.toISOString() : "",
+            data-vendidas=produto.quantidadeVendida || 0
+          )
             img(src=produto.imagens && JSON.parse(produto.imagens)[0] || '/img/placeholder.png', alt=produto.nome)
             h3= produto.nome
             p.preco R$ #{produto.preco.toFixed(2)}
@@ -74,7 +81,7 @@ html(lang="pt-br")
         | Nenhum Produto Encontrado
 
     .footer-bar
-      | 48 98868-6376
+      | © 2025 Heranças do Sul - 48 98868-6376
 
     script.
       const searchInput = document.getElementById("searchInput");
@@ -82,25 +89,58 @@ html(lang="pt-br")
       const noResults = document.getElementById("noResults");
       const produtos = produtosGrid ? produtosGrid.getElementsByClassName("produto-card") : [];
 
+      function filtrarProdutos(filtroTipo, filtroValor) {
+        let found = false;
+        Array.from(produtos).forEach(produto => {
+          const nome = produto.getAttribute("data-nome");
+          const categoria = produto.getAttribute("data-categoria");
+          const desconto = parseFloat(produto.getAttribute("data-desconto")) || 0;
+          const criadoEm = produto.getAttribute("data-criado") ? new Date(produto.getAttribute("data-criado")) : null;
+          const quantidadeVendida = parseInt(produto.getAttribute("data-vendidas")) || 0;
+
+          let mostrar = true;
+
+          if (filtroTipo === "nome") {
+            mostrar = nome.includes(filtroValor);
+          } else if (filtroTipo === "categoria") {
+            mostrar = categoria === filtroValor;
+          } else if (filtroTipo === "novidades") {
+            if (!criadoEm) mostrar = false;
+            else mostrar = (new Date() - criadoEm) < (24 * 60 * 60 * 1000);
+          } else if (filtroTipo === "descontos") {
+            mostrar = desconto > 0;
+          } else if (filtroTipo === "populares") {
+            mostrar = quantidadeVendida > 0;
+          }
+
+          produto.style.display = mostrar ? "block" : "none";
+          if (mostrar) found = true;
+        });
+
+        noResults.style.display = found ? "none" : "block";
+      }
+
       if (searchInput) {
         searchInput.addEventListener("input", function() {
-          const searchTerm = this.value.toLowerCase().trim();
-          let found = false;
-
-          Array.from(produtos).forEach(produto => {
-            const nome = produto.getAttribute("data-nome");
-            if (nome.includes(searchTerm)) {
-              produto.style.display = "block";
-              found = true;
-            } else {
-              produto.style.display = "none";
-            }
-          });
-
-          if (!found && searchTerm !== "") {
-            noResults.style.display = "block";
-          } else {
-            noResults.style.display = "none";
-          }
+          filtrarProdutos("nome", this.value.toLowerCase().trim());
         });
       }
+
+      // Filtro por categorias (dropdown)
+      document.querySelectorAll('.dropdown-content a').forEach(link => {
+        link.addEventListener("click", function(e) {
+          e.preventDefault();
+          filtrarProdutos("categoria", this.textContent.trim().toLowerCase());
+        });
+      });
+
+      // Filtro pelos botões Novidades, Descontos e Populares
+      document.querySelectorAll('.main-nav a').forEach(btn => {
+        const btnText = btn.textContent.trim().toLowerCase();
+        if (["novidades","descontos","populares"].includes(btnText)) {
+          btn.addEventListener("click", function(e){
+            e.preventDefault();
+            filtrarProdutos(btnText, null);
+          });
+        }
+      });
