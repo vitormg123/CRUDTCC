@@ -19,17 +19,17 @@ router.post('/novo', requireAdmin, upload.array('imagens', 10), produtoControlle
 router.get('/:id/editar', requireAdmin, produtoController.formEditarProduto);
 router.post('/:id/editar', requireAdmin, upload.array('imagens', 10), produtoController.editarProduto);
 
-// 🔥 Rota de deletar precisa vir antes da rota GET '/:id'
+// 🔥 Rota de deletar precisa vir antes de '/:id'
 router.post('/:id/deletar', requireAdmin, produtoController.deletarProduto);
 
-// Rota de detalhes do produto
-router.get('/:id', produtoController.verDetalhesProduto);
-
-// Filtros
+// 📌 ROTAS DE FILTRO DEVEM VIR ANTES DO `/:id`
 router.get('/categoria/:categoriaId', produtoController.filtrarPorCategoria);
 router.get('/novidades', produtoController.filtrarNovidades);
 router.get('/descontos', produtoController.filtrarDescontos);
 router.get('/populares', produtoController.filtrarPopulares);
 router.get('/buscar', produtoController.buscarPorNome);
+
+// Rota de detalhes do produto (por último)
+router.get('/:id', produtoController.verDetalhesProduto);
 
 module.exports = router;

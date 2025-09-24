@@ -59,7 +59,6 @@ html(lang="pt-br")
       if mensagemSucesso
         .alert-success= mensagemSucesso
 
-      //- Grid de produtos
       .produtos-grid#produtosGrid
         each produto in produtos
           a.produto-card(
@@ -70,13 +69,13 @@ html(lang="pt-br")
             data-criado=produto.criadoEm ? produto.criadoEm.toISOString() : "",
             data-vendidas=produto.quantidadeVendida || 0
           )
-            img(src=produto.imagens && JSON.parse(produto.imagens)[0] || '/img/placeholder.png', alt=produto.nome)
+            // 🔹 Aqui pegamos a primeira imagem do array
+            img(src=produto.imagens[0] || '/img/placeholder.png', alt=produto.nome)
             h3= produto.nome
             p.preco R$ #{produto.preco.toFixed(2)}
             if produto.desconto > 0
               p.desconto Desconto: #{produto.desconto} %
 
-      // Mensagem caso não encontre produtos
       p#noResults(style="display:none; text-align:center; margin-top:20px; font-size:1.2rem; color:#b7410e;")
         | Nenhum Produto Encontrado
 
@@ -126,7 +125,6 @@ html(lang="pt-br")
         });
       }
 
-      // Filtro por categorias (dropdown)
       document.querySelectorAll('.dropdown-content a').forEach(link => {
         link.addEventListener("click", function(e) {
           e.preventDefault();
@@ -134,7 +132,6 @@ html(lang="pt-br")
         });
       });
 
-      // Filtro pelos botões Novidades, Descontos e Populares
       document.querySelectorAll('.main-nav a').forEach(btn => {
         const btnText = btn.textContent.trim().toLowerCase();
         if (["novidades","descontos","populares"].includes(btnText)) {

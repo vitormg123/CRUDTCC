@@ -15,12 +15,17 @@ body(class="perfil-bg")
         span(style="font-size:0.7em; color:#b7410e;") (Admin)
 
     h3 Categorias Cadastradas
+
+    // Mensagem de sucesso
+    if mensagemSucesso
+      p(style="color:#b7410e; font-weight:bold; margin-bottom:15px;")= mensagemSucesso
+
     ul(class="lista-categorias")
       if categorias.length > 0
         each cat in categorias
           li
             span= cat.nome
-            form(action="/categorias/lista/" + cat.id, method="post", style="display:inline;")
+            form(action="/categorias/" + cat.id + "/deletar", method="post", style="display:inline;", onsubmit="return confirm('Tem certeza que deseja apagar esta categoria?');")
               button(type="submit", class="btn-apagar") Apagar
       else
         li Nenhuma categoria cadastrada.

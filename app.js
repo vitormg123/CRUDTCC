@@ -24,7 +24,8 @@ app.use(session({
 }));
 sessionStore.sync();
 
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+// Servir uploads
+app.use('/uploads', express.static(path.join(__dirname, 'public/uploads')));
 
 // Rotas
 const usuarioRoutes = require('./src/routes/usuarioRoutes');
@@ -35,19 +36,14 @@ const perfilAdminRoutes = require('./src/routes/perfilAdminRoutes');
 const authRoutes = require('./src/routes/authRoutes');
 const carrinhoRoutes = require('./src/routes/carrinhoRoutes');
 
-// Middleware para proteger rotas de admin
+// Middleware de autenticação
 function requireAdmin(req, res, next) {
-  if (req.session && req.session.tipo === 'admin') {
-    return next();
-  }
+  if (req.session && req.session.tipo === 'admin') return next();
   return res.redirect('/login');
 }
 
-// Middleware para proteger rotas autenticadas
 function requireAuth(req, res, next) {
-  if (req.session && req.session.usuarioId) {
-    return next();
-  }
+  if (req.session && req.session.usuarioId) return next();
   return res.redirect('/login');
 }
 
@@ -58,9 +54,7 @@ app.use('/usuarios', (req, res, next) => {
   if (
     req.path === '/novo' || req.path === '/novo/' ||
     (req.method === 'POST' && /\/deletar$/.test(req.path))
-  ) {
-    return next();
-  }
+  ) return next();
   return requireAdmin(req, res, next);
 }, usuarioRoutes);
 
@@ -76,7 +70,13 @@ const { temMaisDeUmUsuario } = require('./src/services/usuarioService');
 app.get('/', async (req, res) => {
   const maisDeUmUsuario = await temMaisDeUmUsuario();
   const categorias = await Categoria.findAll();
-  const produtos = await Produto.findAll({ include: Categoria });
+  const produtosRaw = await Produto.findAll({ include: Categoria });
+
+  // Converte JSON de imagens para array
+  const produtos = produtosRaw.map(prod => {
+    const imagens = prod.imagens ? JSON.parse(prod.imagens) : [];
+    return { ...prod.toJSON(), imagens };
+  });
 
   const mensagemSucesso = req.session.mensagemSucesso;
   req.session.mensagemSucesso = null;
@@ -85,7 +85,7 @@ app.get('/', async (req, res) => {
     usuario: req.session, 
     maisDeUmUsuario, 
     categorias, 
-    produtos,   // produtos enviados para o index
+    produtos,
     mensagemSucesso 
   });
 });
