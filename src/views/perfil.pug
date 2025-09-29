@@ -12,39 +12,21 @@ body(class="perfil-bg")
         img(src="/img/user.png", alt="Foto de Perfil", class="perfil-foto")
       h2= usuario.nome
 
+    // ✅ Informações do usuário
+    .perfil-info
+      p
+        strong E-mail: 
+        | #{usuario.email}
+      p
+        strong CEP: 
+        | #{usuario.cep}
+
     if usuario.tipo === 'admin'
       div(style="margin: 20px 0;")
         a(href="/produtos/novo")
           button(class="admin-btn") Cadastrar Produto
         a(href="/categorias/nova")
           button(class="admin-btn") Cadastrar Categoria
-
-    hr
-
-    h3 Meu Carrinho
-    table
-      tr
-        th Produto
-        th Preço
-        th Desconto
-        th Quantidade
-        th Subtotal
-        th Ações
-
-      if typeof itens !== 'undefined' && itens.length > 0
-        each item in itens
-          tr
-            td= item.produto.nome
-            td R$ #{item.produto.preco.toFixed(2)}
-            td= item.produto.desconto + ' %'
-            td= item.quantidade
-            td R$ #{(item.produto.preco * item.quantidade * (1 - item.produto.desconto/100)).toFixed(2)}
-            td
-              form(action="/carrinho/remover/" + item.produto.id, method="post", style="display:inline;")
-                button(type="submit") Remover
-      else
-        tr
-          td(colspan="6") Seu carrinho está vazio.
 
       if typeof itens !== 'undefined' && itens.length > 0
         p
@@ -96,6 +78,7 @@ style.
     display: flex;
     align-items: center;
     gap: 20px;
+    margin-bottom: 20px;
   }
   .perfil-foto {
     width: 80px;
@@ -104,6 +87,13 @@ style.
     background: #444;
     border: 2px solid #b7410e;
     object-fit: cover;
+  }
+  .perfil-info {
+    margin-bottom: 20px;
+    font-size: 1.05em;
+  }
+  .perfil-info strong {
+    color: #ffa559;
   }
   .admin-btn {
     background: #b7410e;

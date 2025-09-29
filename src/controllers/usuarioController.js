@@ -7,19 +7,52 @@ exports.listarUsuarios = async (req, res) => {
 };
 
 exports.formNovoUsuario = (req, res) => {
-  res.render('usuarios/novo');
+  res.render('usuarios/novo', { erro: null, dados: {} });
 };
 
 exports.criarUsuario = async (req, res) => {
-  const { nome, email, senha, tipo } = req.body;
-  const hash = await bcrypt.hash(senha, 10);
-  const novoUsuario = await Usuario.create({ nome, email, senha: hash, tipo });
-  // Login automático após cadastro
-  req.session.usuarioId = novoUsuario.id;
-  req.session.tipo = novoUsuario.tipo;
-  req.session.nome = novoUsuario.nome;
-  req.session.email = novoUsuario.email;
-  res.redirect('/');
+  const { nome, email, senha, tipo, cep, pais, estado, cidade, municipio } = req.body;
+
+  try {
+    // Verifica se já existe usuário com esse email
+    const existente = await Usuario.findOne({ where: { email } });
+    if (existente) {
+      return res.render('usuarios/novo', {
+        erro: 'usuario-existente',
+        dados: req.body
+      });
+    }
+
+    // Criptografar a senha
+    const hash = await bcrypt.hash(senha, 10);
+
+    // Criar usuário com todos os campos
+    const novoUsuario = await Usuario.create({
+      nome,
+      email,
+      senha: hash,
+      tipo,
+      cep,
+      pais,
+      estado,
+      cidade,
+      municipio
+    });
+
+    // Login automático após cadastro
+    req.session.usuarioId = novoUsuario.id;
+    req.session.tipo = novoUsuario.tipo;
+    req.session.nome = novoUsuario.nome;
+    req.session.email = novoUsuario.email;
+
+    res.redirect('/');
+  } catch (error) {
+    console.error(error);
+    return res.render('usuarios/novo', {
+      erro: 'erro-validacao',
+      dados: req.body
+    });
+  }
 };
 
 exports.formEditarUsuario = async (req, res) => {
@@ -28,15 +61,20 @@ exports.formEditarUsuario = async (req, res) => {
 };
 
 exports.editarUsuario = async (req, res) => {
-  const { nome, email, tipo } = req.body;
-  await Usuario.update({ nome, email, tipo }, { where: { id: req.params.id } });
+  const { nome, email, tipo, cep, pais, estado, cidade, municipio } = req.body;
+
+  await Usuario.update(
+    { nome, email, tipo, cep, pais, estado, cidade, municipio },
+    { where: { id: req.params.id } }
+  );
+
   res.redirect('/usuarios');
 };
 
 exports.deletarUsuario = async (req, res) => {
   const usuarioId = req.session.usuarioId;
   await Usuario.destroy({ where: { id: req.params.id } });
-  // Se o usuário deletou o próprio perfil, limpar a sessão
+
   if (parseInt(req.params.id) === usuarioId) {
     req.session.destroy(() => {
       res.clearCookie('connect.sid');

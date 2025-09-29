@@ -10,9 +10,16 @@ body(class="perfil-bg")
         img(src=usuario.fotoPerfil, alt="Foto de Perfil", class="perfil-foto")
       else
         img(src="/img/user.png", alt="Foto de Perfil", class="perfil-foto")
-      h2
-        | #{usuario.nome}
-        span(style="font-size:0.7em; color:#b7410e;") (Admin)
+      .perfil-info
+        h2
+          | #{usuario.nome}
+          span(style="font-size:0.7em; color:#b7410e;") (Admin)
+        p
+          strong Email: 
+          | #{usuario.email}
+        p
+          strong CEP: 
+          | #{usuario.cep}
 
     h3 Categorias Cadastradas
 
@@ -29,33 +36,6 @@ body(class="perfil-bg")
               button(type="submit", class="btn-apagar") Apagar
       else
         li Nenhuma categoria cadastrada.
-
-    hr
-
-    h3 Meu Carrinho
-    table
-      tr
-        th Produto
-        th Preço
-        th Desconto
-        th Quantidade
-        th Subtotal
-        th Ações
-
-      if itens.length > 0
-        each item in itens
-          tr
-            td= item.produto.nome
-            td R$ #{item.produto.preco.toFixed(2)}
-            td= item.produto.desconto + ' %'
-            td= item.quantidade
-            td R$ #{(item.produto.preco * item.quantidade * (1 - item.produto.desconto/100)).toFixed(2)}
-            td
-              form(action="/carrinho/remover/" + item.produto.id, method="post", style="display:inline;")
-                button(type="submit") Remover
-      else
-        tr
-          td(colspan="6") Seu carrinho está vazio.
 
     if itens.length > 0
       p
@@ -107,6 +87,9 @@ body(class="perfil-bg")
       display: flex;
       align-items: center;
       gap: 20px;
+    }
+    .perfil-info p {
+      margin: 4px 0;
     }
     .perfil-foto {
       width: 80px;
