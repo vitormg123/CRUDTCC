@@ -64,13 +64,18 @@ html(lang="pt-br")
           a.produto-card(
             href="/produtos/" + produto.id, 
             data-nome=produto.nome.toLowerCase(), 
-            data-categoria=produto.Categoria ? produto.Categoria.nome.toLowerCase() : "",
+            data-categoria=produto.Categoria ? produto.Categoria.nome : "",
             data-desconto=produto.desconto,
             data-criado=produto.criadoEm ? produto.criadoEm.toISOString() : "",
             data-vendidas=produto.quantidadeVendida || 0
           )
-            // 🔹 Aqui pegamos a primeira imagem do array
-            img(src=produto.imagens[0] || '/img/placeholder.png', alt=produto.nome)
+            - let imagemSrc = '/img/placeholder.png'
+            - if (produto.imagens)
+            -   let imgs = Array.isArray(produto.imagens) ? produto.imagens : []
+            -   if (!Array.isArray(produto.imagens) && typeof produto.imagens === 'string') 
+            -     try { imgs = JSON.parse(produto.imagens) } catch(e) { imgs = [] }
+            -   if (imgs.length > 0) imagemSrc = imgs[0]
+            img(src=imagemSrc, alt=produto.nome)
             h3= produto.nome
             p.preco R$ #{produto.preco.toFixed(2)}
             if produto.desconto > 0
@@ -88,27 +93,39 @@ html(lang="pt-br")
       const noResults = document.getElementById("noResults");
       const produtos = produtosGrid ? produtosGrid.getElementsByClassName("produto-card") : [];
 
+      let filtroAtivo = { tipo: null, valor: null };
+
+      function normalizeString(str) {
+        return str ? str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().trim() : "";
+      }
+
       function filtrarProdutos(filtroTipo, filtroValor) {
+        // Toggle: se clicar no mesmo filtro, remove
+        if (filtroAtivo.tipo === filtroTipo && normalizeString(filtroAtivo.valor) === normalizeString(filtroValor || "")) {
+          filtroAtivo = { tipo: null, valor: null };
+        } else {
+          filtroAtivo = { tipo: filtroTipo, valor: filtroValor };
+        }
+
         let found = false;
         Array.from(produtos).forEach(produto => {
           const nome = produto.getAttribute("data-nome");
-          const categoria = produto.getAttribute("data-categoria");
+          const categoria = produto.getAttribute("data-categoria") || "";
           const desconto = parseFloat(produto.getAttribute("data-desconto")) || 0;
           const criadoEm = produto.getAttribute("data-criado") ? new Date(produto.getAttribute("data-criado")) : null;
           const quantidadeVendida = parseInt(produto.getAttribute("data-vendidas")) || 0;
 
           let mostrar = true;
 
-          if (filtroTipo === "nome") {
-            mostrar = nome.includes(filtroValor);
-          } else if (filtroTipo === "categoria") {
-            mostrar = categoria === filtroValor;
-          } else if (filtroTipo === "novidades") {
-            if (!criadoEm) mostrar = false;
-            else mostrar = (new Date() - criadoEm) < (24 * 60 * 60 * 1000);
-          } else if (filtroTipo === "descontos") {
+          if (filtroAtivo.tipo === "nome") {
+            mostrar = nome.includes(filtroAtivo.valor);
+          } else if (filtroAtivo.tipo === "categoria") {
+            mostrar = normalizeString(categoria) === normalizeString(filtroAtivo.valor);
+          } else if (filtroAtivo.tipo === "novidades") {
+            mostrar = criadoEm ? (new Date() - criadoEm) < (24*60*60*1000) : false;
+          } else if (filtroAtivo.tipo === "descontos") {
             mostrar = desconto > 0;
-          } else if (filtroTipo === "populares") {
+          } else if (filtroAtivo.tipo === "populares") {
             mostrar = quantidadeVendida > 0;
           }
 
@@ -119,19 +136,24 @@ html(lang="pt-br")
         noResults.style.display = found ? "none" : "block";
       }
 
+      // Busca por nome
       if (searchInput) {
         searchInput.addEventListener("input", function() {
           filtrarProdutos("nome", this.value.toLowerCase().trim());
         });
       }
 
+      // Filtro de categorias
       document.querySelectorAll('.dropdown-content a').forEach(link => {
         link.addEventListener("click", function(e) {
           e.preventDefault();
-          filtrarProdutos("categoria", this.textContent.trim().toLowerCase());
+          const categoriaNome = this.textContent.trim();
+          if (!categoriaNome) return;
+          filtrarProdutos("categoria", categoriaNome);
         });
       });
 
+      // Filtros Novidades, Descontos, Populares
       document.querySelectorAll('.main-nav a').forEach(btn => {
         const btnText = btn.textContent.trim().toLowerCase();
         if (["novidades","descontos","populares"].includes(btnText)) {
