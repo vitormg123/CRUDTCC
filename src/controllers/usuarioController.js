@@ -11,10 +11,9 @@ exports.formNovoUsuario = (req, res) => {
 };
 
 exports.criarUsuario = async (req, res) => {
-  const { nome, email, senha, tipo, cep, pais, estado, cidade, municipio } = req.body;
+  const { nome, email, senha, tipo, cep, pais, estado, cidade, municipio, telefone, rg } = req.body;
 
   try {
-    // Verifica se já existe usuário com esse email
     const existente = await Usuario.findOne({ where: { email } });
     if (existente) {
       return res.render('usuarios/novo', {
@@ -23,10 +22,8 @@ exports.criarUsuario = async (req, res) => {
       });
     }
 
-    // Criptografar a senha
     const hash = await bcrypt.hash(senha, 10);
 
-    // Criar usuário com todos os campos
     const novoUsuario = await Usuario.create({
       nome,
       email,
@@ -36,10 +33,11 @@ exports.criarUsuario = async (req, res) => {
       pais,
       estado,
       cidade,
-      municipio
+      municipio,
+      telefone,
+      rg
     });
 
-    // Login automático após cadastro
     req.session.usuarioId = novoUsuario.id;
     req.session.tipo = novoUsuario.tipo;
     req.session.nome = novoUsuario.nome;
@@ -61,10 +59,10 @@ exports.formEditarUsuario = async (req, res) => {
 };
 
 exports.editarUsuario = async (req, res) => {
-  const { nome, email, tipo, cep, pais, estado, cidade, municipio } = req.body;
+  const { nome, email, tipo, cep, pais, estado, cidade, municipio, telefone, rg } = req.body;
 
   await Usuario.update(
-    { nome, email, tipo, cep, pais, estado, cidade, municipio },
+    { nome, email, tipo, cep, pais, estado, cidade, municipio, telefone, rg },
     { where: { id: req.params.id } }
   );
 

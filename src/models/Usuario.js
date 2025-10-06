@@ -45,6 +45,14 @@ const Usuario = sequelize.define('Usuario', {
     type: DataTypes.STRING, 
     allowNull: false 
   },
+  telefone: { // novo campo
+    type: DataTypes.STRING,
+    allowNull: true
+  },
+  rg: { // novo campo
+    type: DataTypes.STRING,
+    allowNull: true
+  },
   fotoPerfil: { 
     type: DataTypes.STRING, 
     allowNull: true 

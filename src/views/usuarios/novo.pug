@@ -23,6 +23,12 @@ html(lang="pt-br")
             label Email:
             input(type="email", name="email", required, value=(dados && dados.email ? dados.email : ''))
 
+            label Telefone:
+            input(type="text", name="telefone", placeholder="(00) 00000-0000", value=(dados && dados.telefone ? dados.telefone : ''))
+
+            label RG:
+            input(type="text", name="rg", placeholder="00000000", value=(dados && dados.rg ? dados.rg : ''))
+
             label Senha:
             input(type="password", name="senha", required)
 
