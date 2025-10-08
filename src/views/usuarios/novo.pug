@@ -1,4 +1,3 @@
-//- usuarios/novo.pug
 doctype html
 html(lang="pt-br")
   head
@@ -7,10 +6,6 @@ html(lang="pt-br")
     title Novo Usuário - Heranças do Sul
     link(rel="stylesheet", href="/css/style.css")
   body
-    // Botão Voltar fora do container
-    a(href="/", style="display: inline-block; margin: 20px;")
-      button(style="background-color: #b7410e; color: #fff; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer;") Voltar
-
     .form-bg
       .form-box
         h2 Novo Usuário
@@ -24,10 +19,21 @@ html(lang="pt-br")
             input(type="email", name="email", required, value=(dados && dados.email ? dados.email : ''))
 
             label Telefone:
-            input(type="text", name="telefone", placeholder="(00) 00000-0000", value=(dados && dados.telefone ? dados.telefone : ''))
+            input(
+              type="text",
+              name="telefone",
+              placeholder="(00) 00000-0000",
+              value=(dados && dados.telefone ? dados.telefone : ''),
+              pattern="\\(\\d{2}\\) \\d{4,5}-\\d{4}",
+              title="Digite um telefone válido: (00) 00000-0000",
+              required,
+              id="telefoneInput"
+            )
+            span#telefoneError(style="color:#b7410e; font-size:0.9em; display:none;") Telefone inválido. Use o formato (00) 00000-0000.
 
             label RG:
-            input(type="text", name="rg", placeholder="00000000", value=(dados && dados.rg ? dados.rg : ''))
+            input(type="text", name="rg", placeholder="00000000", value=(dados && dados.rg ? dados.rg : ''), pattern="\\d{8}", title="O RG deve ter exatamente 8 dígitos numéricos", required, id="rgInput")
+            span#rgError(style="color:#b7410e; font-size:0.9em; display:none;") RG inválido. Deve ter 8 dígitos numéricos.
 
             label Senha:
             input(type="password", name="senha", required)
@@ -40,7 +46,8 @@ html(lang="pt-br")
           // Coluna 2 - endereço
           .form-col
             label CEP:
-            input(type="text", name="cep", pattern="[0-9]{5}-?[0-9]{3}", placeholder="00000-000", required, value=(dados && dados.cep ? dados.cep : ''))
+            input(type="text", name="cep", pattern="[0-9]{5}-?[0-9]{3}", placeholder="00000-000", required, value=(dados && dados.cep ? dados.cep : ''), id="cepInput")
+            span#cepError(style="color:#b7410e; font-size:0.9em; display:none;") CEP inválido. Use o formato 00000-000.
 
             label País:
             input(type="text", name="pais", placeholder="Brasil", required, value=(dados && dados.pais ? dados.pais : ''))
@@ -54,71 +61,47 @@ html(lang="pt-br")
             label Município/Bairro:
             input(type="text", name="municipio", required, value=(dados && dados.municipio ? dados.municipio : ''))
 
-          // Botão ocupa as 2 colunas
-          button(type="submit").btn Cadastrar
+          // Container flex para os botões
+          .form-buttons(style="grid-column: span 2; display: flex; justify-content: space-between; align-items: center;")
+            a(href="/")
+              button(type="button", style="background-color: #b7410e; color: #fff; padding: 12px 24px; border: none; border-radius: 5px; cursor: pointer;") Voltar
+            button(type="submit").btn Cadastrar
 
     if erro
       script.
         alert("#{erro}")
 
     style.
-      html, body {
-        background: #1a1a1a !important;
-        min-height: 100vh;
-        margin: 0;
-        padding: 0;
-      }
-      .form-bg {
-        min-height: 100vh;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background: #1a1a1a;
-      }
-      .form-box {
-        background: #222;
-        border: 2.5px solid #b7410e;
-        border-radius: 10px;
-        padding: 40px 32px;
-        box-shadow: 0 2px 16px #0005;
-        width: 800px;
-        color: #fff;
-      }
-      .form-box h2 {
-        margin-bottom: 24px;
-        text-align: center;
-      }
-      .form-grid {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 20px 40px;
-      }
-      .form-col label {
-        display: block;
-        margin-bottom: 8px;
-        font-size: 1.05em;
-      }
-      .form-col input, .form-col select {
-        width: 100%;
-        padding: 8px;
-        margin-bottom: 16px;
-        border-radius: 4px;
-        border: 1px solid #444;
-        background: #333;
-        color: #fff;
-        font-size: 1em;
-        box-sizing: border-box;
-      }
-      .btn {
-        grid-column: span 2;
-        padding: 12px;
-        font-size: 1.1em;
-        border: none;
-        border-radius: 5px;
-        background: #b7410e;
-        color: #fff;
-        cursor: pointer;
-      }
-      .btn:hover {
-        background: #99330c;
-      }
+      html, body { background: #1a1a1a !important; min-height: 100vh; margin: 0; padding: 0; }
+      .form-bg { min-height: 100vh; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; padding-top: 40px; padding-bottom: 40px; background: #1a1a1a; }
+      .form-box { background: #222; border: 2.5px solid #b7410e; border-radius: 10px; padding: 40px 32px; box-shadow: 0 2px 16px #0005; width: 800px; color: #fff; }
+      .form-box h2 { margin-bottom: 24px; text-align: center; }
+      .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px 40px; }
+      .form-col label { display: block; margin-bottom: 8px; font-size: 1.05em; }
+      .form-col input, .form-col select { width: 100%; padding: 8px; margin-bottom: 16px; border-radius: 4px; border: 1px solid #444; background: #333; color: #fff; font-size: 1em; box-sizing: border-box; }
+      .btn { padding: 12px 24px; font-size: 1.1em; border: none; border-radius: 5px; background: #b7410e; color: #fff; cursor: pointer; }
+      .btn:hover { background: #99330c; }
+
+    script.
+      const rgInput = document.getElementById('rgInput');
+      const rgError = document.getElementById('rgError');
+      rgInput.addEventListener('input', function() {
+        rgError.style.display = /^\d{8}$/.test(this.value) ? 'none' : 'block';
+      });
+
+      const cepInput = document.getElementById('cepInput');
+      const cepError = document.getElementById('cepError');
+      cepInput.addEventListener('input', function() {
+        cepError.style.display = /^\d{5}-?\d{3}$/.test(this.value) ? 'none' : 'block';
+      });
+
+      const telefoneInput = document.getElementById('telefoneInput');
+      const telefoneError = document.getElementById('telefoneError');
+      telefoneInput.addEventListener('input', function() {
+        let v = this.value.replace(/\D/g,'');
+        if (v.length > 11) v = v.slice(0,11);
+        v = v.replace(/^(\d{2})(\d)/g,'($1) $2');
+        v = v.replace(/(\d{5})(\d{4})$/,'$1-$2');
+        this.value = v;
+        telefoneError.style.display = /^\(\d{2}\) \d{4,5}-\d{4}$/.test(v) ? 'none' : 'block';
+      });
