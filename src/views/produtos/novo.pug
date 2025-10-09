@@ -5,14 +5,11 @@ html(lang="pt-br")
     meta(name="viewport", content="width=device-width, initial-scale=1.0")
     title Novo Produto
     link(rel="stylesheet", href="/css/style.css")
-
   body
     .page-container
       .form-container
         h2 Novo Produto
         button.voltar-btn(type="button", onclick="window.location.href='/'") Voltar
-
-
 
         form(action="/produtos/novo", method="post", enctype="multipart/form-data")
           label Nome:

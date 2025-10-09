@@ -29,39 +29,104 @@ html(lang="pt-br")
       .carousel img {
         width: 100%;
         height: 350px;
-        object-fit: contain; /* Mantém proporção da imagem, não corta */
+        object-fit: contain;
         display: none;
       }
       .carousel img.active {
         display: block;
       }
       .carousel-controls {
-        text-align: center;
-        margin-top: 10px;
+        position: absolute;
+        top: 50%;
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        transform: translateY(-50%);
+        pointer-events: none;
       }
       .carousel-controls button {
-        background: #fff;
+        background: rgba(255, 255, 255, 0.8);
         color: #b7410e;
         border: none;
-        padding: 5px 12px;
-        margin: 0 5px;
+        padding: 8px 14px;
         border-radius: 5px;
         cursor: pointer;
+        pointer-events: auto;
       }
       .produto-info {
         flex: 1;
         min-width: 250px;
+        text-align: left;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .produto-info p {
+        line-height: 1.1;
+        margin: 4px 0;   
+      }
+      .quantidade-wrapper {
+        margin-top: 10px;
+        margin-bottom: 15px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .quantidade-wrapper label {
+        white-space: nowrap;
+        position: relative;
+        top: -15px;
+      }
+      .quantidade-wrapper input {
+        width: 70px;
+        height: 30px;
+        border-radius: 5px;
+        border: 1px solid #fff;
+        text-align: center;
+      }
+      .btn-carrinho-wrapper {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+        width: 100%;
+        margin-top: 10px;
+      }
+      .btn-carrinho, .btn-editar, .btn-deletar {
+        width: 200px;
+        text-align: center;
+        padding: 10px 0;
+        font-weight: bold;
+        border-radius: 5px;
+        cursor: pointer;
+        background-color: #fff;
+        color: #b7410e; /* texto laranja */
+        border: none;
+        transition: 0.3s;
+      }
+      .btn-carrinho:hover, .btn-editar:hover, .btn-deletar:hover {
+        background-color: #000;
+        color: #fff;
+      }
+      .avaliacao-estrelas {
+        display: flex;
+        gap: 5px;
+        font-size: 1.3em;
+        cursor: pointer;
+        margin-top: 15px;
+        justify-content: flex-start;
+      }
+      .avaliacao-estrelas span {
+        color: #ffd700;
       }
 
   body
-    // Botão Voltar
     a(href="/", style="display: inline-block; margin: 20px;")
       button(style="background-color: #b7410e; color: #fff; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer;") Voltar
 
     main
       .produto-detalhes-container
         .produto-layout
-          // ✅ Carousel de imagens
           - const imagens = produto.imagens ? JSON.parse(produto.imagens) : [];
           if imagens.length
             .carousel
@@ -73,31 +138,44 @@ html(lang="pt-br")
           else
             img(src="/img/placeholder.png", alt="Sem imagem")
 
-          // ✅ Informações do produto
           .produto-info
             h1(style="margin-bottom: 10px;")= produto.nome
+            p Descrição: #{produto.descricao}
             p.preco R$ #{produto.preco.toFixed(2)}
             if produto.desconto > 0
               p.desconto Desconto: #{produto.desconto} %
             if produto.Categoria
               p Categoria: #{produto.Categoria.nome}
             p Tamanho: #{produto.tamanho}
-            p Descrição: #{produto.descricao}
 
-            // Botões de ação
-            .produto-acoes
+            .quantidade-wrapper
+              label(for="quantidadeInput") Quantidade:
+              input#quantidadeInput(type="number", name="quantidade", value="1", min="1", max="100")
+
+            //- Botões centralizados em escada
+            .btn-carrinho-wrapper
               if usuario
                 form(action="/carrinho/adicionar/" + produto.id, method="post")
+                  input(type="hidden", name="quantidade", value="1", id="quantidadeHidden")
                   button(type="submit", class="btn-carrinho") Adicionar ao Carrinho
               else
                 a(href="/login")
                   button(type="button", class="btn-carrinho") Adicionar ao Carrinho
 
               if usuario && usuario.tipo === 'admin'
-                form(action="/produtos/" + produto.id + "/deletar", method="post")
-                  button(type="submit", class="btn-deletar") Excluir Produto
                 a(href="/produtos/" + produto.id + "/editar")
                   button(class="btn-editar") Editar Produto
+                form(action="/produtos/" + produto.id + "/deletar", method="post")
+                  button(type="submit", class="btn-deletar") Excluir Produto
+
+        //- Avaliação de estrelas abaixo do carrossel
+        if imagens.length
+          .avaliacao-estrelas
+            span(data-value="1") ★
+            span(data-value="2") ★
+            span(data-value="3") ★
+            span(data-value="4") ★
+            span(data-value="5") ★
 
     script.
       let currentIndex = 0;
@@ -120,3 +198,20 @@ html(lang="pt-br")
         currentIndex = (currentIndex + 1) % imgs.length;
         showImg(currentIndex);
       }
+
+      const quantidadeInput = document.getElementById('quantidadeInput');
+      const quantidadeHidden = document.getElementById('quantidadeHidden');
+      quantidadeInput.addEventListener('input', () => {
+        quantidadeHidden.value = quantidadeInput.value;
+      });
+
+      const estrelas = document.querySelectorAll('.avaliacao-estrelas span');
+      estrelas.forEach((estrela) => {
+        estrela.addEventListener('click', () => {
+          const valor = estrela.getAttribute('data-value');
+          estrelas.forEach((s) => {
+            if (s.getAttribute('data-value') <= valor) s.style.color = '#ffd700';
+            else s.style.color = '#fff';
+          });
+        });
+      });

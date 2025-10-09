@@ -45,7 +45,7 @@ html(lang="pt-br")
         button.dropbtn Categorias
         .dropdown-content
           each cat in categorias
-            a(href="#")= cat.nome
+            a(href="#", data-categoria=cat.nome)= cat.nome
 
       a(href="#")
         button Novidades
@@ -60,10 +60,11 @@ html(lang="pt-br")
 
       .produtos-grid#produtosGrid
         each produto in produtos
+          - const categoriaNome = produto.Categoria ? produto.Categoria.nome : ""
           a.produto-card(
             href="/produtos/" + produto.id, 
             data-nome=produto.nome.toLowerCase(), 
-            data-categoria=produto.Categoria ? produto.Categoria.nome : "",
+            data-categoria=categoriaNome.toLowerCase(),
             data-desconto=produto.desconto,
             data-criado=produto.criadoEm ? produto.criadoEm.toISOString() : "",
             data-vendidas=produto.quantidadeVendida || 0
@@ -104,8 +105,8 @@ html(lang="pt-br")
 
         let found = false;
         Array.from(produtos).forEach(produto => {
-          const nome = produto.getAttribute("data-nome");
-          const categoria = produto.getAttribute("data-categoria") || "";
+          const nome = normalizeString(produto.getAttribute("data-nome") || "");
+          const categoria = normalizeString(produto.getAttribute("data-categoria") || "");
           const desconto = parseFloat(produto.getAttribute("data-desconto")) || 0;
           const criadoEm = produto.getAttribute("data-criado") ? new Date(produto.getAttribute("data-criado")) : null;
           const quantidadeVendida = parseInt(produto.getAttribute("data-vendidas")) || 0;
@@ -113,9 +114,9 @@ html(lang="pt-br")
           let mostrar = true;
 
           if (filtroAtivo.tipo === "nome") {
-            mostrar = nome.includes(filtroAtivo.valor);
+            mostrar = nome.includes(normalizeString(filtroAtivo.valor));
           } else if (filtroAtivo.tipo === "categoria") {
-            mostrar = normalizeString(categoria) === normalizeString(filtroAtivo.valor);
+            mostrar = categoria === normalizeString(filtroAtivo.valor);
           } else if (filtroAtivo.tipo === "novidades") {
             mostrar = criadoEm ? (new Date() - criadoEm) < (24*60*60*1000) : false;
           } else if (filtroAtivo.tipo === "descontos") {
@@ -124,28 +125,30 @@ html(lang="pt-br")
             mostrar = quantidadeVendida > 0;
           }
 
-          produto.style.display = mostrar ? "block" : "none";
+          produto.style.display = mostrar ? "inline-block" : "none";
           if (mostrar) found = true;
         });
 
         noResults.style.display = found ? "none" : "block";
       }
 
+      // Busca por nome
       if (searchInput) {
         searchInput.addEventListener("input", function() {
-          filtrarProdutos("nome", this.value.toLowerCase().trim());
+          filtrarProdutos("nome", this.value.trim());
         });
       }
 
+      // Filtro por categoria
       document.querySelectorAll('.dropdown-content a').forEach(link => {
         link.addEventListener("click", function(e) {
           e.preventDefault();
-          const categoriaNome = this.textContent.trim();
-          if (!categoriaNome) return;
+          const categoriaNome = this.getAttribute("data-categoria");
           filtrarProdutos("categoria", categoriaNome);
         });
       });
 
+      // Filtro por novidades, descontos e populares
       document.querySelectorAll('.main-nav a').forEach(btn => {
         const btnText = btn.textContent.trim().toLowerCase();
         if (["novidades","descontos","populares"].includes(btnText)) {
