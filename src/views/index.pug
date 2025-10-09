@@ -60,7 +60,7 @@ html(lang="pt-br")
 
       .produtos-grid#produtosGrid
         each produto in produtos
-          - const categoriaNome = produto.Categoria ? produto.Categoria.nome : ""
+          - const categoriaNome = produto.Categorium ? produto.Categorium.nome : ""
           a.produto-card(
             href="/produtos/" + produto.id, 
             data-nome=produto.nome.toLowerCase(), 

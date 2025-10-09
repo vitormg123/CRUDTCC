@@ -18,8 +18,27 @@ body(class="perfil-bg")
         strong E-mail: 
         | #{usuario.email}
       p
+        strong Telefone: 
+        | #{usuario.telefone}
+      p
         strong CEP: 
         | #{usuario.cep}
+      p
+        strong País: 
+        | #{usuario.pais}
+      p
+        strong Estado: 
+        | #{usuario.estado}
+      p
+        strong Cidade: 
+        | #{usuario.cidade}
+      p
+        strong Bairro: 
+        | #{usuario.municipio}
+      if usuario.rg
+        p
+          strong RG: 
+          | #{usuario.rg}
 
     if usuario.tipo === 'admin'
       div(style="margin: 20px 0;")
@@ -29,10 +48,6 @@ body(class="perfil-bg")
           button(class="admin-btn") Cadastrar Categoria
 
       if typeof itens !== 'undefined' && itens.length > 0
-        p
-          strong Total: R$ #{total.toFixed(2)}
-        form(action="/carrinho/finalizar", method="post")
-          button(type="submit") Finalizar Compra
 
     //- Zona Perigosa
     .danger-zone-wrapper
@@ -93,7 +108,7 @@ style.
     font-size: 1.05em;
   }
   .perfil-info strong {
-    color: #ffa559;
+    color: #fff;
   }
   .admin-btn {
     background: #b7410e;

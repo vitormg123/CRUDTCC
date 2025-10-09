@@ -6,37 +6,36 @@ body(class="carrinho-bg")
       h2(class="carrinho-titulo") Carrinho de Compras
 
   .carrinho-container
-    if mensagem
-      p(class="mensagem")= mensagem
-
-    table
-      tr
-        th Produto
-        th Preço
-        th Desconto
-        th Quantidade
-        th Subtotal
-        th Ações
-
-      each item in itens
+    if itens.length === 0
+      .mensagem-container
+        p.mensagem Carrinho vazio
+    else
+      table
         tr
-          td= item.produto.nome
-          td R$ #{item.produto.preco.toFixed(2)}
-          td= item.produto.desconto + ' %'
-          td= item.quantidade
-          td R$ #{(item.produto.preco * item.quantidade * (1 - item.produto.desconto/100)).toFixed(2)}
-          td
-            form(action="/carrinho/remover/" + item.produto.id, method="post", style="display:inline;")
-              button(type="submit", class="btn-remover") Remover
+          th Produto
+          th Preço
+          th Desconto
+          th Quantidade
+          th Subtotal
+          th Ações
 
-    p
-      strong Total: R$ #{total.toFixed(2)}
+        each item in itens
+          tr
+            td= item.produto.nome
+            td R$ #{item.produto.preco.toFixed(2)}
+            td= item.produto.desconto + ' %'
+            td= item.quantidade
+            td R$ #{(item.produto.preco * item.quantidade * (1 - item.produto.desconto/100)).toFixed(2)}
+            td
+              form(action="/carrinho/remover/" + item.produto.id, method="post", style="display:inline;")
+                button(type="submit", class="btn-remover") Remover
 
-    if itens.length > 0
+      p
+        strong Total: R$ #{total.toFixed(2)}
+
       form(action="/carrinho/finalizar", method="post")
         button(type="submit", class="btn-finalizar") Finalizar Compra
 
-  //- CSS inline para a página Carrinho
   style.
     body.carrinho-bg {
       background: #1a1a1a;
@@ -47,14 +46,14 @@ body(class="carrinho-bg")
     }
 
     .top-bar-wrapper {
-      max-width: 800px; /* mesma largura do container */
-      margin: 20px auto 10px auto; /* centraliza horizontalmente e dá espaço acima/abaixo */
+      max-width: 800px;
+      margin: 20px auto 10px auto;
     }
 
     .top-bar {
       display: flex;
       align-items: center;
-      justify-content: flex-start; /* botão à esquerda, título à direita */
+      justify-content: flex-start;
       gap: 20px;
     }
 
@@ -77,23 +76,32 @@ body(class="carrinho-bg")
       color: #fff;
       margin: 0;
       font-size: 1.8rem;
-      flex: 1; /* ocupa espaço restante mantendo centralização */
+      flex: 1;
     }
 
     .carrinho-container {
-      background: #1a1a1a;
+      background: #2a2a2a; /* cor do container do produtos/novo.pug */
       border: 2.5px solid #cf5209;
       border-radius: 12px;
       padding: 20px;
       max-width: 800px;
       margin: 0 auto 50px auto;
       box-shadow: 0 0 12px #0007;
-      min-height: 500px; /* altura aumentada */
+      min-height: 500px;
+    }
+
+
+    .mensagem-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 200px; /* garante espaço razoável sem exagerar */
     }
 
     .mensagem {
-      color: green;
-      margin-bottom: 15px;
+      color: #b7410e;
+      font-weight: bold;
+      font-size: 1.2rem;
     }
 
     table {
@@ -140,3 +148,4 @@ body(class="carrinho-bg")
 
     .btn-finalizar:hover {
       background: #e6661a;
+    }

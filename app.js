@@ -68,26 +68,34 @@ const { temMaisDeUmUsuario } = require('./src/services/usuarioService');
 
 // Rota principal
 app.get('/', async (req, res) => {
-  const maisDeUmUsuario = await temMaisDeUmUsuario();
-  const categorias = await Categoria.findAll();
-  const produtosRaw = await Produto.findAll({ include: Categoria });
+  try {
+    const maisDeUmUsuario = await temMaisDeUmUsuario();
+    const categorias = await Categoria.findAll();
+    
+    const produtosRaw = await Produto.findAll({ 
+      include: { model: Categoria, as: 'Categorium' } 
+    });
 
-  // Converte JSON de imagens para array
-  const produtos = produtosRaw.map(prod => {
-    const imagens = prod.imagens ? JSON.parse(prod.imagens) : [];
-    return { ...prod.toJSON(), imagens };
-  });
+    // Converte JSON de imagens para array
+    const produtos = produtosRaw.map(prod => {
+      const imagens = prod.imagens ? JSON.parse(prod.imagens) : [];
+      return { ...prod.toJSON(), imagens };
+    });
 
-  const mensagemSucesso = req.session.mensagemSucesso;
-  req.session.mensagemSucesso = null;
+    const mensagemSucesso = req.session.mensagemSucesso;
+    req.session.mensagemSucesso = null;
 
-  res.render('index', { 
-    usuario: req.session, 
-    maisDeUmUsuario, 
-    categorias, 
-    produtos,
-    mensagemSucesso 
-  });
+    res.render('index', { 
+      usuario: req.session, 
+      maisDeUmUsuario, 
+      categorias, 
+      produtos,
+      mensagemSucesso 
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Erro ao carregar a página inicial");
+  }
 });
 
 // Inicializa banco e servidor

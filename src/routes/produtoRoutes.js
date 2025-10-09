@@ -19,7 +19,7 @@ router.get('/:id/editar', requireAdmin, produtoController.formEditarProduto);
 router.post('/:id/editar', requireAdmin, upload.array('imagens', 10), produtoController.editarProduto);
 router.post('/:id/deletar', requireAdmin, produtoController.deletarProduto);
 
-// Rotas de filtro (devem vir antes da rota genérica de detalhes)
+// Rotas de filtro (sempre antes da genérica de detalhes)
 router.get('/categoria/:categoriaId', produtoController.filtrarPorCategoria);
 router.get('/novidades', produtoController.filtrarNovidades);
 router.get('/descontos', produtoController.filtrarDescontos);

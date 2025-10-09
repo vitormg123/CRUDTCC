@@ -11,7 +11,7 @@ const parseImagens = (produtosRaw) => {
 // Listar todos os produtos
 exports.listarProdutos = async (req, res) => {
   try {
-    const produtosRaw = await Produto.findAll({ include: Categoria });
+    const produtosRaw = await Produto.findAll({ include: { model: Categoria, as: 'Categorium' } });
     const produtos = parseImagens(produtosRaw);
     res.render('produtos/lista', { produtos, usuario: req.session });
   } catch (err) {
@@ -103,7 +103,7 @@ exports.filtrarPorCategoria = async (req, res) => {
   try {
     const produtosRaw = await Produto.findAll({
       where: { categoriaId: req.params.categoriaId },
-      include: Categoria
+      include: { model: Categoria, as: 'Categorium' }
     });
     const produtos = parseImagens(produtosRaw);
     res.render('produtos/lista', { produtos, usuario: req.session });
@@ -119,7 +119,7 @@ exports.filtrarNovidades = async (req, res) => {
     const ontem = new Date(Date.now() - 24 * 60 * 60 * 1000);
     const produtosRaw = await Produto.findAll({
       where: { criadoEm: { [Op.gte]: ontem } },
-      include: Categoria
+      include: { model: Categoria, as: 'Categorium' }
     });
     const produtos = parseImagens(produtosRaw);
     res.render('produtos/lista', { produtos, usuario: req.session });
@@ -134,7 +134,7 @@ exports.filtrarDescontos = async (req, res) => {
   try {
     const produtosRaw = await Produto.findAll({
       where: { desconto: { [Op.gt]: 0 } },
-      include: Categoria
+      include: { model: Categoria, as: 'Categorium' }
     });
     const produtos = parseImagens(produtosRaw);
     res.render('produtos/lista', { produtos, usuario: req.session });
@@ -150,7 +150,7 @@ exports.filtrarPopulares = async (req, res) => {
     const produtosRaw = await Produto.findAll({
       order: [['quantidadeVendida', 'DESC']],
       limit: 10,
-      include: Categoria
+      include: { model: Categoria, as: 'Categorium' }
     });
     const produtos = parseImagens(produtosRaw);
     res.render('produtos/lista', { produtos, usuario: req.session });
@@ -166,7 +166,7 @@ exports.buscarPorNome = async (req, res) => {
     const { q } = req.query;
     const produtosRaw = await Produto.findAll({
       where: { nome: { [Op.like]: `%${q}%` } },
-      include: Categoria
+      include: { model: Categoria, as: 'Categorium' }
     });
     const produtos = parseImagens(produtosRaw);
     res.render('produtos/lista', { produtos, usuario: req.session });
@@ -181,7 +181,7 @@ exports.verDetalhesProduto = async (req, res) => {
   try {
     const produto = await Produto.findOne({
       where: { id: req.params.id },
-      include: Categoria
+      include: { model: Categoria, as: 'Categorium' }
     });
     if (!produto) return res.status(404).send("Produto não encontrado");
 

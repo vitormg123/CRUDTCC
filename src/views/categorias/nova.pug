@@ -6,13 +6,15 @@ html(lang="pt-br")
     title Nova Categoria
     link(rel="stylesheet", href="/css/style.css")
 
-  body
+  body(style="background: #1a1a1a;")
     .page-container
-      .form-container
+      .form-container(style="background: #2a2a2a; padding: 30px; border-radius: 12px; max-width: 600px; margin: 50px auto; box-shadow: 0 0 12px #0007;")
         h2 Nova Categoria
-        button.voltar-btn(type="button", onclick="window.location.href='/'") Voltar
 
-        form(action="/categorias/nova", method="post", class="categoria-form")
+        form(action="/categorias/nova", method="post", class="categoria-form", style="display: flex; flex-direction: column; gap: 15px;")
           label Nome:
-          input(type="text", name="nome", placeholder="Nome da categoria", required)
-          button(type="submit", class="admin-btn") Cadastrar
+          input(type="text", name="nome", placeholder="Nome da categoria", required, style="background: #2a2a2a; color: #fff; border: 1px solid #cf5209; border-radius: 6px; padding: 8px;")
+
+          .form-buttons(style="display: flex; justify-content: space-between; margin-top: 20px;")
+            button.voltar-btn(type="button", onclick="window.location.href='/'", style="background: #cf5209; color: #fff; border: none; padding: 10px 18px; border-radius: 6px; cursor: pointer;") Voltar
+            button.admin-btn(type="submit", style="background: #cf5209; color: #fff; border: none; padding: 10px 18px; border-radius: 6px; cursor: pointer;") Cadastrar
