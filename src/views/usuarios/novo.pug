@@ -27,12 +27,23 @@ html(lang="pt-br")
               pattern="\\(\\d{2}\\) \\d{4,5}-\\d{4}",
               title="Digite um telefone válido: (00) 00000-0000",
               required,
-              id="telefoneInput"
+              id="telefoneInput",
+              maxlength="15"
             )
             span#telefoneError(style="color:#b7410e; font-size:0.9em; display:none;") Telefone inválido. Use o formato (00) 00000-0000.
 
             label RG:
-            input(type="text", name="rg", placeholder="00000000", value=(dados && dados.rg ? dados.rg : ''), pattern="\\d{8}", title="O RG deve ter exatamente 8 dígitos numéricos", required, id="rgInput")
+            input(
+              type="text",
+              name="rg",
+              placeholder="00000000",
+              value=(dados && dados.rg ? dados.rg : ''),
+              pattern="\\d{8}",
+              title="O RG deve ter exatamente 8 dígitos numéricos",
+              required,
+              id="rgInput",
+              maxlength="8"
+            )
             span#rgError(style="color:#b7410e; font-size:0.9em; display:none;") RG inválido. Deve ter 8 dígitos numéricos.
 
             label Senha:
@@ -46,7 +57,16 @@ html(lang="pt-br")
           // Coluna 2 - endereço
           .form-col
             label CEP:
-            input(type="text", name="cep", pattern="[0-9]{5}-?[0-9]{3}", placeholder="00000-000", required, value=(dados && dados.cep ? dados.cep : ''), id="cepInput")
+            input(
+              type="text",
+              name="cep",
+              pattern="[0-9]{5}-?[0-9]{3}",
+              placeholder="00000-000",
+              required,
+              value=(dados && dados.cep ? dados.cep : ''),
+              id="cepInput",
+              maxlength="9"
+            )
             span#cepError(style="color:#b7410e; font-size:0.9em; display:none;") CEP inválido. Use o formato 00000-000.
 
             label País:
@@ -83,18 +103,30 @@ html(lang="pt-br")
       .btn:hover { background: #99330c; }
 
     script.
+      // RG
       const rgInput = document.getElementById('rgInput');
       const rgError = document.getElementById('rgError');
       rgInput.addEventListener('input', function() {
-        rgError.style.display = /^\d{8}$/.test(this.value) ? 'none' : 'block';
+        let v = this.value.replace(/\D/g,''); // remove tudo que não é número
+        if (v.length > 8) v = v.slice(0,8);   // limite de 8 dígitos
+        this.value = v;
+        rgError.style.display = /^\d{8}$/.test(v) ? 'none' : 'block';
       });
 
+      // CEP
       const cepInput = document.getElementById('cepInput');
       const cepError = document.getElementById('cepError');
       cepInput.addEventListener('input', function() {
-        cepError.style.display = /^\d{5}-?\d{3}$/.test(this.value) ? 'none' : 'block';
+        let v = this.value.replace(/\D/g,''); // remove tudo que não é número
+        if (v.length > 8) v = v.slice(0,8);   // limite de 8 dígitos
+        if (v.length > 5) {
+          v = v.replace(/^(\d{5})(\d{1,3})$/, '$1-$2'); // adiciona hífen
+        }
+        this.value = v;
+        cepError.style.display = /^\d{5}-\d{3}$/.test(v) ? 'none' : 'block';
       });
 
+      // Telefone
       const telefoneInput = document.getElementById('telefoneInput');
       const telefoneError = document.getElementById('telefoneError');
       telefoneInput.addEventListener('input', function() {

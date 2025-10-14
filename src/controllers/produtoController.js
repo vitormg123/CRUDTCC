@@ -31,12 +31,33 @@ exports.formNovoProduto = async (req, res) => {
   }
 };
 
-// Criar produto
 exports.criarProduto = async (req, res) => {
   try {
     const { nome, descricao, preco, desconto, categoriaId, tamanho } = req.body;
-    const imagens = req.files ? req.files.map(file => '/uploads/' + file.filename) : [];
+    const categorias = await Categoria.findAll();
 
+    // Pega apenas arquivos válidos
+    const imagens = req.files
+      ? req.files
+          .filter(f => f.filename) // só arquivos que passaram no fileFilter
+          .map(f => '/uploads/' + f.filename)
+      : [];
+
+    // Se não houver imagens válidas, retorna alert
+    if (imagens.length === 0) {
+      return res.render('produtos/novo', {
+        categorias,
+        alertMessage: 'O formato de imagem não é compatível!',
+        nome,
+        descricao,
+        preco,
+        desconto,
+        tamanho,
+        categoriaId
+      });
+    }
+
+    // Criação do produto
     await Produto.create({
       nome,
       descricao,
@@ -54,6 +75,7 @@ exports.criarProduto = async (req, res) => {
     res.status(500).send('Erro ao cadastrar produto');
   }
 };
+
 
 // Formulário editar produto
 exports.formEditarProduto = async (req, res) => {
