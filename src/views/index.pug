@@ -5,6 +5,8 @@ html(lang="pt-br")
     meta(name="viewport", content="width=device-width, initial-scale=1.0")
     title Heranças do Sul
     link(rel="stylesheet", href="/css/style.css")
+    link(rel="icon", type="image/png", href="/img/logo.png")
+
 
   body
     header
@@ -158,3 +160,13 @@ html(lang="pt-br")
           });
         }
       });
+
+      // Desaparecer mensagem de sucesso após alguns segundos
+            const alertSuccess = document.querySelector('.alert-success');
+            if(alertSuccess) {
+              setTimeout(() => {
+                alertSuccess.style.transition = 'opacity 0.5s';
+                alertSuccess.style.opacity = '0';
+                setTimeout(() => alertSuccess.remove(), 500); // remove do DOM após o fade
+              }, 4000); // 4000ms = 4 segundos
+            }

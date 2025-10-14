@@ -390,13 +390,25 @@ select:focus {
    Mensagens
    ========================= */
 .alert-success {
-  background-color: #d4edda;
-  color: #155724;
-  border: 1px solid #c3e6cb;
-  padding: 10px;
-  border-radius: 4px;
+  background-color: #b7410e; 
+  color: #fff;               
+  border: 2px solid #fff;    
+  padding: 12px 20px;
+  border-radius: 6px;
   margin: 10px 0;
   text-align: center;
+  font-weight: bold;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.3); 
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+  animation: fadeOut 3s ease-in-out forwards;
+}
+
+/* Animação para sumir suavemente */
+@keyframes fadeOut {
+  from { opacity: 1; }
+  to { opacity: 0; display: none; }
 }
 
 /* =========================
