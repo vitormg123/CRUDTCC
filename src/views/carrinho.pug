@@ -27,14 +27,20 @@ body(class="carrinho-bg")
             td= item.quantidade
             td R$ #{(item.produto.preco * item.quantidade * (1 - item.produto.desconto/100)).toFixed(2)}
             td
-              form(action="/carrinho/remover/" + item.produto.id, method="post", style="display:inline;")
-                button(type="submit", class="btn-remover") Remover
+              .acoes-item
+                form(action="/carrinho/remover/" + item.produto.id, method="post")
+                  button(type="submit", class="btn-remover") Remover
+                form(action="/carrinho/removerTudo/" + item.produto.id, method="post")
+                  button(type="submit", class="btn-tirar-tudo") Tirar
 
-      p
-        strong Total: R$ #{total.toFixed(2)}
-
-      form(action="/carrinho/finalizar", method="post")
-        button(type="submit", class="btn-finalizar") Finalizar Compra
+      .carrinho-footer
+        p
+          strong Total: R$ #{total.toFixed(2)}
+        .botoes-inferiores
+          form(action="/carrinho/finalizar", method="post")
+            button(type="submit", class="btn-finalizar") Finalizar Compra
+          form(action="/carrinho/zerar", method="post")
+            button(type="submit", class="btn-zerar") Zerar Carrinho
 
   style.
     body.carrinho-bg {
@@ -80,7 +86,7 @@ body(class="carrinho-bg")
     }
 
     .carrinho-container {
-      background: #2a2a2a; /* cor do container do produtos/novo.pug */
+      background: #2a2a2a;
       border: 2.5px solid #cf5209;
       border-radius: 12px;
       padding: 20px;
@@ -88,14 +94,16 @@ body(class="carrinho-bg")
       margin: 0 auto 50px auto;
       box-shadow: 0 0 12px #0007;
       min-height: 500px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
     }
-
 
     .mensagem-container {
       display: flex;
       align-items: center;
       justify-content: center;
-      min-height: 200px; /* garante espaço razoável sem exagerar */
+      min-height: 200px;
     }
 
     .mensagem {
@@ -121,21 +129,55 @@ body(class="carrinho-bg")
       color: #cf5209;
     }
 
+    .acoes-item {
+      display: flex;
+      gap: 5px;
+      justify-content: center;
+    }
+
+    .btn-remover, .btn-tirar-tudo {
+      height: 36px;
+      line-height: 36px;
+      padding: 0 12px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: background 0.2s;
+    }
+
     .btn-remover {
       background: #444;
       color: #fff;
       border: 1px solid #cf5209;
-      padding: 6px 12px;
-      border-radius: 4px;
-      cursor: pointer;
-      transition: background 0.2s;
     }
 
     .btn-remover:hover {
       background: #333;
     }
 
-    .btn-finalizar {
+    .btn-tirar-tudo {
+      background: #b7410e;
+      color: #fff;
+      border: 1px solid #cf5209;
+    }
+
+    .btn-tirar-tudo:hover {
+      background: #d3541a;
+    }
+
+    .carrinho-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 15px;
+    }
+
+    .botoes-inferiores {
+      display: flex;
+      gap: 10px;
+    }
+
+    .btn-finalizar, .btn-zerar {
       background: #cf5209;
       color: #fff;
       border: none;
@@ -146,6 +188,6 @@ body(class="carrinho-bg")
       transition: background 0.2s;
     }
 
-    .btn-finalizar:hover {
+    .btn-finalizar:hover, .btn-zerar:hover {
       background: #e6661a;
     }

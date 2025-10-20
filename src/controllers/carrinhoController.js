@@ -1,6 +1,6 @@
 const { Produto } = require('../models');
 
-// Adiciona produto ao carrinho com quantidade personalizada
+// Adiciona produto ao carrinho
 exports.adicionarAoCarrinho = async (req, res) => {
   const produtoId = parseInt(req.params.produtoId);
   const quantidade = parseInt(req.body.quantidade) || 1;
@@ -12,7 +12,7 @@ exports.adicionarAoCarrinho = async (req, res) => {
 
   if (item) {
     item.quantidade += quantidade;
-    if (item.quantidade > 100) item.quantidade = 100; // limite máximo
+    if (item.quantidade > 100) item.quantidade = 100;
   } else {
     carrinho.push({ produtoId, quantidade });
   }
@@ -21,7 +21,7 @@ exports.adicionarAoCarrinho = async (req, res) => {
   res.redirect('/carrinho');
 };
 
-// Mostra o carrinho
+// Ver carrinho
 exports.verCarrinho = async (req, res) => {
   const carrinho = req.session.carrinho || [];
   if (carrinho.length === 0) {
@@ -40,11 +40,10 @@ exports.verCarrinho = async (req, res) => {
   });
 
   const total = itens.reduce((soma, i) => soma + i.subtotal, 0);
-
   res.render('carrinho', { itens, total, mensagem: null });
 };
 
-// Remove **uma unidade** do produto ou todo o item se só tiver 1
+// Remove 1 unidade
 exports.removerDoCarrinho = (req, res) => {
   const produtoId = parseInt(req.params.produtoId);
   if (!req.session.carrinho) return res.redirect('/carrinho');
@@ -61,11 +60,14 @@ exports.removerDoCarrinho = (req, res) => {
   res.redirect('/carrinho');
 };
 
-exports.zerarCarrinho = (req, res) => {
-  req.session.carrinho = [];
+// Remove todas unidades de um produto
+exports.removerTudoDoCarrinho = (req, res) => {
+  const produtoId = parseInt(req.params.produtoId);
+  if (!req.session.carrinho) return res.redirect('/carrinho');
+
+  req.session.carrinho = req.session.carrinho.filter(i => i.produtoId !== produtoId);
   res.redirect('/carrinho');
 };
-
 
 // Finalizar compra
 exports.finalizarCompra = async (req, res) => {
@@ -82,4 +84,10 @@ exports.finalizarCompra = async (req, res) => {
 
   req.session.carrinho = [];
   res.render('carrinho', { itens: [], total: 0, mensagem: 'Compra finalizada com sucesso!' });
+};
+
+// Zerar todo o carrinho
+exports.zerarCarrinho = (req, res) => {
+  req.session.carrinho = [];
+  res.redirect('/carrinho');
 };
