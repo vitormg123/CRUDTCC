@@ -61,6 +61,12 @@ exports.removerDoCarrinho = (req, res) => {
   res.redirect('/carrinho');
 };
 
+exports.zerarCarrinho = (req, res) => {
+  req.session.carrinho = [];
+  res.redirect('/carrinho');
+};
+
+
 // Finalizar compra
 exports.finalizarCompra = async (req, res) => {
   const carrinho = req.session.carrinho || [];

@@ -1,8 +1,33 @@
-h2 Editar Categoria
+doctype html
+html(lang="pt-br")
+  head
+    meta(charset="UTF-8")
+    meta(name="viewport", content="width=device-width, initial-scale=1.0")
+    title Editar Categoria
+    link(rel="stylesheet", href="/css/style.css")
 
-form(action="/categorias/" + categoria.id + "/editar", method="post")
-label
-| Nome:
-input(type="text", name="nome", value=categoria.nome, required)
-br
-button(type="submit") Salvar
+  body(style="background: #1a1a1a;")
+    .page-container
+      .form-container(style="background: #2a2a2a; padding: 30px; border-radius: 12px; max-width: 600px; margin: 50px auto; box-shadow: 0 0 12px #0007;")
+        h2 Editar Categoria
+
+        form(action="/categorias/" + categoria.id + "/editar", method="post", class="categoria-form", style="display: flex; flex-direction: column; gap: 15px;")
+          label Nome:
+          input(
+            type="text",
+            name="nome",
+            value=categoria.nome,
+            required,
+            style="background: #2a2a2a; color: #fff; border: 1px solid #cf5209; border-radius: 6px; padding: 8px;"
+          )
+
+          .form-buttons(style="display: flex; justify-content: space-between; margin-top: 20px;")
+            button.voltar-btn(
+              type="button",
+              onclick="window.location.href='/categorias/lista'",
+              style="background: #cf5209; color: #fff; border: none; padding: 10px 18px; border-radius: 6px; cursor: pointer;"
+            ) Voltar
+            button.admin-btn(
+              type="submit",
+              style="background: #cf5209; color: #fff; border: none; padding: 10px 18px; border-radius: 6px; cursor: pointer;"
+            ) Salvar

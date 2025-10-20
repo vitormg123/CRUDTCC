@@ -100,7 +100,7 @@ html(lang="pt-br")
         border-radius: 5px;
         cursor: pointer;
         background-color: #fff;
-        color: #b7410e; /* texto laranja */
+        color: #b7410e;
         border: none;
         transition: 0.3s;
       }
@@ -117,7 +117,16 @@ html(lang="pt-br")
         justify-content: flex-start;
       }
       .avaliacao-estrelas span {
+        color: #fff;
+        transition: color 0.2s;
+      }
+      .avaliacao-estrelas span.ativo {
         color: #ffd700;
+      }
+      .media-avaliacao {
+        margin-top: 8px;
+        font-size: 0.9em;
+        color: #fff;
       }
 
   body
@@ -131,7 +140,7 @@ html(lang="pt-br")
           if imagens.length
             .carousel
               each imgSrc, index in imagens
-                img(src=imgSrc, alt=produto.nome + " " + (index + 1), class=(index === 0 ? "active" : ""))
+                img(src=imgSrc, alt=produto.nome + " " + (index + 1), class=(index === 0 ? "active" : "")) 
               .carousel-controls
                 button(type="button", onclick="prevImg()") ◀
                 button(type="button", onclick="nextImg()") ▶
@@ -152,7 +161,6 @@ html(lang="pt-br")
               label(for="quantidadeInput") Quantidade:
               input#quantidadeInput(type="number", name="quantidade", value="1", min="1", max="100")
 
-            //- Botões centralizados em escada
             .btn-carrinho-wrapper
               if usuario
                 form(action="/carrinho/adicionar/" + produto.id, method="post")
@@ -168,50 +176,52 @@ html(lang="pt-br")
                 form(action="/produtos/" + produto.id + "/deletar", method="post")
                   button(type="submit", class="btn-deletar") Excluir Produto
 
-        //- Avaliação de estrelas abaixo do carrossel
-        if imagens.length
-          .avaliacao-estrelas
-            span(data-value="1") ★
-            span(data-value="2") ★
-            span(data-value="3") ★
-            span(data-value="4") ★
-            span(data-value="5") ★
-
     script.
       let currentIndex = 0;
       const imgs = document.querySelectorAll('.carousel img');
 
       function showImg(index) {
-        imgs.forEach((img, i) => {
-          img.classList.toggle('active', i === index);
-        });
+        imgs.forEach((img, i) => img.classList.toggle('active', i === index));
       }
-
       function prevImg() {
-        if (imgs.length === 0) return;
+        if (!imgs.length) return;
         currentIndex = (currentIndex - 1 + imgs.length) % imgs.length;
         showImg(currentIndex);
       }
-
       function nextImg() {
-        if (imgs.length === 0) return;
+        if (!imgs.length) return;
         currentIndex = (currentIndex + 1) % imgs.length;
         showImg(currentIndex);
       }
 
-      const quantidadeInput = document.getElementById('quantidadeInput');
-      const quantidadeHidden = document.getElementById('quantidadeHidden');
-      quantidadeInput.addEventListener('input', () => {
-        quantidadeHidden.value = quantidadeInput.value;
-      });
+      const qInput = document.getElementById('quantidadeInput');
+      const qHidden = document.getElementById('quantidadeHidden');
+      if (qInput && qHidden) {
+        qInput.addEventListener('input', () => qHidden.value = qInput.value);
+      }
 
+      // --- Sistema de avaliação funcional ---
       const estrelas = document.querySelectorAll('.avaliacao-estrelas span');
       estrelas.forEach((estrela) => {
-        estrela.addEventListener('click', () => {
+        estrela.addEventListener('click', async () => {
           const valor = estrela.getAttribute('data-value');
           estrelas.forEach((s) => {
-            if (s.getAttribute('data-value') <= valor) s.style.color = '#ffd700';
-            else s.style.color = '#fff';
+            s.classList.toggle('ativo', s.getAttribute('data-value') <= valor);
           });
+
+          try {
+            const resp = await fetch(`/produtos/${#{produto.id}}/avaliar`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ nota: valor })
+            });
+            if (resp.ok) {
+              const data = await resp.json();
+              const mediaEl = document.querySelector('.media-avaliacao');
+              if (mediaEl) mediaEl.textContent = `Média: ${data.media.toFixed(1)} / 5`;
+            }
+          } catch (err) {
+            console.error('Erro ao avaliar:', err);
+          }
         });
       });

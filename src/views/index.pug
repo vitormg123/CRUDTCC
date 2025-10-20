@@ -7,7 +7,6 @@ html(lang="pt-br")
     link(rel="stylesheet", href="/css/style.css")
     link(rel="icon", type="image/png", href="/img/logo.png")
 
-
   body
     header
       .header-content
@@ -24,8 +23,8 @@ html(lang="pt-br")
               button Cadastrar-se
           else
             if usuario.tipo === 'admin'
-              a(href="/categorias/nova")
-                button Cadastrar Categoria
+              a(href="/categorias/lista")
+                button Categorias
               a(href="/produtos/novo")
                 button Cadastrar Produto
               a(href="/perfil-admin")
@@ -84,7 +83,7 @@ html(lang="pt-br")
         | Nenhum Produto Encontrado
 
     .footer-bar
-      | © 2025 Heranças do Sul - 48 98868-6376
+      | © 2025 Heranças do Sul - (48)988496497
 
     script.
       const searchInput = document.getElementById("searchInput");
@@ -134,14 +133,12 @@ html(lang="pt-br")
         noResults.style.display = found ? "none" : "block";
       }
 
-      // Busca por nome
       if (searchInput) {
         searchInput.addEventListener("input", function() {
           filtrarProdutos("nome", this.value.trim());
         });
       }
 
-      // Filtro por categoria
       document.querySelectorAll('.dropdown-content a').forEach(link => {
         link.addEventListener("click", function(e) {
           e.preventDefault();
@@ -150,7 +147,6 @@ html(lang="pt-br")
         });
       });
 
-      // Filtro por novidades, descontos e populares
       document.querySelectorAll('.main-nav a').forEach(btn => {
         const btnText = btn.textContent.trim().toLowerCase();
         if (["novidades","descontos","populares"].includes(btnText)) {
@@ -161,12 +157,11 @@ html(lang="pt-br")
         }
       });
 
-      // Desaparecer mensagem de sucesso após alguns segundos
-            const alertSuccess = document.querySelector('.alert-success');
-            if(alertSuccess) {
-              setTimeout(() => {
-                alertSuccess.style.transition = 'opacity 0.5s';
-                alertSuccess.style.opacity = '0';
-                setTimeout(() => alertSuccess.remove(), 500); // remove do DOM após o fade
-              }, 4000); // 4000ms = 4 segundos
-            }
+      const alertSuccess = document.querySelector('.alert-success');
+      if(alertSuccess) {
+        setTimeout(() => {
+          alertSuccess.style.transition = 'opacity 0.5s';
+          alertSuccess.style.opacity = '0';
+          setTimeout(() => alertSuccess.remove(), 500);
+        }, 4000);
+      }

@@ -16,5 +16,14 @@ html(lang="pt-br")
           input(type="text", name="nome", placeholder="Nome da categoria", required, style="background: #2a2a2a; color: #fff; border: 1px solid #cf5209; border-radius: 6px; padding: 8px;")
 
           .form-buttons(style="display: flex; justify-content: space-between; margin-top: 20px;")
-            button.voltar-btn(type="button", onclick="window.location.href='/'", style="background: #cf5209; color: #fff; border: none; padding: 10px 18px; border-radius: 6px; cursor: pointer;") Voltar
-            button.admin-btn(type="submit", style="background: #cf5209; color: #fff; border: none; padding: 10px 18px; border-radius: 6px; cursor: pointer;") Cadastrar
+            // 🔹 Botão "Voltar" agora leva para a lista de categorias
+            button.voltar-btn(
+              type="button",
+              onclick="window.location.href='/categorias'",
+              style="background: #cf5209; color: #fff; border: none; padding: 10px 18px; border-radius: 6px; cursor: pointer;"
+            ) Voltar
+
+            button.admin-btn(
+              type="submit",
+              style="background: #cf5209; color: #fff; border: none; padding: 10px 18px; border-radius: 6px; cursor: pointer;"
+            ) Cadastrar

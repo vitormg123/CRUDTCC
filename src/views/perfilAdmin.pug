@@ -40,21 +40,9 @@ body(class="perfil-bg")
             strong RG: 
             | #{usuario.rg}
 
-    h3 Categorias Cadastradas
-
     // Mensagem de sucesso
     if mensagemSucesso
       p(style="color:#b7410e; font-weight:bold; margin-bottom:15px;")= mensagemSucesso
-
-    ul(class="lista-categorias")
-      if categorias.length > 0
-        each cat in categorias
-          li
-            span= cat.nome
-            form(action="/categorias/" + cat.id + "/deletar", method="post", style="display:inline;", onsubmit="return confirm('Tem certeza que deseja apagar esta categoria?');")
-              button(type="submit", class="btn-apagar") Apagar
-      else
-        li Nenhuma categoria cadastrada.
 
     if itens.length > 0
 
@@ -113,33 +101,6 @@ style.
     background: #444;
     border: 2px solid #b7410e;
     object-fit: cover;
-  }
-  .lista-categorias {
-    list-style: none;
-    padding: 0;
-    margin: 0 0 20px 0;
-  }
-  .lista-categorias li {
-    background: #333;
-    color: #fff;
-    margin-bottom: 6px;
-    padding: 8px 12px;
-    border-radius: 4px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  .btn-apagar {
-    background: #b7410e;
-    color: #fff;
-    border: none;
-    padding: 6px 12px;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background 0.2s;
-  }
-  .btn-apagar:hover {
-    background: #d3541a;
   }
   /* Zona Perigosa */
   .danger-zone-wrapper {

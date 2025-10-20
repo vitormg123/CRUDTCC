@@ -1,18 +1,75 @@
-h2 Categorias
+doctype html
+html(lang="pt-br")
+  head
+    meta(charset="UTF-8")
+    meta(name="viewport", content="width=device-width, initial-scale=1.0")
+    title Lista de Categorias
+    link(rel="stylesheet", href="/css/style.css")
 
-a(href="/categorias/nova") Nova Categoria
+  body(style="background: #1a1a1a;")
+    .page-container(style="max-width: 800px; margin: 50px auto; padding: 30px; background: #222; border-radius: 12px; box-shadow: 0 0 12px #0007; color: #fff;")
+      
+      // 🔹 Container dos botões
+      .top-buttons(style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;")
+        // Botão Voltar
+        button.voltar-btn(
+          type="button",
+          onclick="window.location.href='/'",
+          style="background: #cf5209; color: #fff; border: none; padding: 10px 18px; border-radius: 6px; cursor: pointer;"
+        ) Voltar
 
-table
-tr
-th ID
-th Nome
-th Ações
+        // Botão Nova Categoria
+        a(
+          href="/categorias/nova",
+          style="display:inline-block; background:#cf5209; color:#fff; padding:10px 18px; border-radius:6px; text-decoration:none; font-weight:bold;"
+        ) Nova Categoria
 
-each categoria in categorias
-tr
-td= categoria.id
-td= categoria.nome
-td
-a(href="/categorias/" + categoria.id + "/editar") Editar
-form(action="/categorias/" + categoria.id + "/deletar", method="post", style="display:inline;")
-button(type="submit") Deletar
+      h2 Lista de Categorias
+
+      // Mensagem de sucesso
+      if mensagemSucesso
+        p(style="color:#b7410e; font-weight:bold; margin-bottom:15px;")= mensagemSucesso
+
+      if categorias.length > 0
+        ul(class="lista-categorias")
+          each cat in categorias
+            li
+              span= cat.nome
+              .acoes
+                a(href="/categorias/" + cat.id + "/editar", style="margin-right:10px; color:#b7410e; text-decoration:none;") Editar
+                form(action="/categorias/" + cat.id + "/deletar", method="post", style="display:inline;", onsubmit="return confirm('Tem certeza que deseja apagar esta categoria?');")
+                  button(type="submit", class="btn-apagar") Apagar
+      else
+        p Nenhuma categoria cadastrada.
+
+style.
+  .lista-categorias {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  .lista-categorias li {
+    background: #333;
+    color: #fff;
+    margin-bottom: 8px;
+    padding: 10px 12px;
+    border-radius: 6px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .btn-apagar {
+    background: #b7410e;
+    color: #fff;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .btn-apagar:hover {
+    background: #d3541a;
+  }
+  .acoes a {
+    font-weight: bold;
+  }
