@@ -24,8 +24,8 @@ exports.criarUsuario = async (req, res) => {
   const { nome, email, senha, tipo, cep, pais, estado, cidade, municipio, telefone, rg } = req.body;
 
   // Validações servidor-side
-  if (!/^\d{8}$/.test(rg)) {
-    return res.render('usuarios/novo', { erro: 'RG inválido. Deve ter 8 dígitos numéricos.', dados: req.body });
+  if (!/^\d{11}$/.test(rg)) {
+    return res.render('usuarios/novo', { erro: 'RG inválido. Deve ter 11 dígitos numéricos.', dados: req.body });
   }
 
   if (!/^\(\d{2}\) \d{4,5}-\d{4}$/.test(telefone)) {
@@ -79,8 +79,8 @@ exports.editarUsuario = async (req, res) => {
   const { nome, email, tipo, cep, pais, estado, cidade, municipio, telefone, rg } = req.body;
 
   // Validações servidor-side
-  if (!/^\d{8}$/.test(rg)) {
-    return res.render('usuarios/editar', { erro: 'RG inválido. Deve ter 8 dígitos numéricos.', usuario: { id: req.params.id, ...req.body } });
+  if (!/^\d{11}$/.test(rg)) {
+    return res.render('usuarios/editar', { erro: 'RG inválido. Deve ter 11 dígitos numéricos.', usuario: { id: req.params.id, ...req.body } });
   }
 
   if (!/^\(\d{2}\) \d{4,5}-\d{4}$/.test(telefone)) {
