@@ -1,4 +1,4 @@
-//- produtoDetalhes.pug
+//- produto-detalhes.pug
 doctype html
 html(lang="pt-br")
   head
@@ -62,8 +62,28 @@ html(lang="pt-br")
         align-items: flex-start;
       }
       .produto-info p {
-        line-height: 1.1;
-        margin: 4px 0;   
+        line-height: 1.2;
+        margin: 4px 0;
+      }
+      .opcoes-wrapper {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-bottom: 15px;
+      }
+      .opcao-btn {
+        padding: 5px 12px;
+        border: 1px solid #fff;
+        border-radius: 5px;
+        background: transparent;
+        color: #fff;
+        cursor: pointer;
+        transition: 0.3s;
+      }
+      .opcao-btn.selected {
+        background-color: #fff;
+        color: #b7410e;
+        font-weight: bold;
       }
       .quantidade-wrapper {
         margin-top: 10px;
@@ -74,8 +94,6 @@ html(lang="pt-br")
       }
       .quantidade-wrapper label {
         white-space: nowrap;
-        position: relative;
-        top: -15px;
       }
       .quantidade-wrapper input {
         width: 70px;
@@ -108,26 +126,6 @@ html(lang="pt-br")
         background-color: #000;
         color: #fff;
       }
-      .avaliacao-estrelas {
-        display: flex;
-        gap: 5px;
-        font-size: 1.3em;
-        cursor: pointer;
-        margin-top: 15px;
-        justify-content: flex-start;
-      }
-      .avaliacao-estrelas span {
-        color: #fff;
-        transition: color 0.2s;
-      }
-      .avaliacao-estrelas span.ativo {
-        color: #ffd700;
-      }
-      .media-avaliacao {
-        margin-top: 8px;
-        font-size: 0.9em;
-        color: #fff;
-      }
 
   body
     a(href="/", style="display: inline-block; margin: 20px;")
@@ -140,7 +138,7 @@ html(lang="pt-br")
           if imagens.length
             .carousel
               each imgSrc, index in imagens
-                img(src=imgSrc, alt=produto.nome + " " + (index + 1), class=(index === 0 ? "active" : "")) 
+                img(src=imgSrc, alt=produto.nome + " " + (index + 1), class=(index === 0 ? "active" : ""))
               .carousel-controls
                 button(type="button", onclick="prevImg()") ◀
                 button(type="button", onclick="nextImg()") ▶
@@ -155,7 +153,22 @@ html(lang="pt-br")
               p.desconto Desconto: #{produto.desconto} %
             if produto.Categoria
               p Categoria: #{produto.Categoria.nome}
-            p Tamanho: #{produto.tamanho}
+
+            //- Seleção de cores
+            - const cores = produto.cores ? JSON.parse(produto.cores) : [];
+            if cores.length
+              p Escolha a cor:
+              .opcoes-wrapper
+                each cor in cores
+                  button(type="button", class="opcao-btn", data-type="cor", data-value=cor)= cor
+
+            //- Seleção de tamanhos
+            - const tamanhos = produto.tamanhos ? JSON.parse(produto.tamanhos) : [];
+            if tamanhos.length
+              p Escolha o tamanho:
+              .opcoes-wrapper
+                each tam in tamanhos
+                  button(type="button", class="opcao-btn", data-type="tamanho", data-value=tam)= tam
 
             .quantidade-wrapper
               label(for="quantidadeInput") Quantidade:
@@ -163,8 +176,10 @@ html(lang="pt-br")
 
             .btn-carrinho-wrapper
               if usuario
-                form(action="/carrinho/adicionar/" + produto.id, method="post")
+                form#formCarrinho(action="/carrinho/adicionar/" + produto.id, method="post")
                   input(type="hidden", name="quantidade", value="1", id="quantidadeHidden")
+                  input(type="hidden", name="cor", value="", id="corHidden")
+                  input(type="hidden", name="tamanho", value="", id="tamanhoHidden")
                   button(type="submit", class="btn-carrinho") Adicionar ao Carrinho
               else
                 a(href="/login")
@@ -177,51 +192,32 @@ html(lang="pt-br")
                   button(type="submit", class="btn-deletar") Excluir Produto
 
     script.
+      // Carousel
       let currentIndex = 0;
       const imgs = document.querySelectorAll('.carousel img');
+      function showImg(index) { imgs.forEach((img, i) => img.classList.toggle('active', i === index)); }
+      function prevImg() { if (!imgs.length) return; currentIndex = (currentIndex - 1 + imgs.length) % imgs.length; showImg(currentIndex); }
+      function nextImg() { if (!imgs.length) return; currentIndex = (currentIndex + 1) % imgs.length; showImg(currentIndex); }
 
-      function showImg(index) {
-        imgs.forEach((img, i) => img.classList.toggle('active', i === index));
-      }
-      function prevImg() {
-        if (!imgs.length) return;
-        currentIndex = (currentIndex - 1 + imgs.length) % imgs.length;
-        showImg(currentIndex);
-      }
-      function nextImg() {
-        if (!imgs.length) return;
-        currentIndex = (currentIndex + 1) % imgs.length;
-        showImg(currentIndex);
-      }
-
+      // Quantidade dinâmica
       const qInput = document.getElementById('quantidadeInput');
       const qHidden = document.getElementById('quantidadeHidden');
-      if (qInput && qHidden) {
-        qInput.addEventListener('input', () => qHidden.value = qInput.value);
-      }
+      if (qInput && qHidden) qInput.addEventListener('input', () => qHidden.value = qInput.value);
 
-      // --- Sistema de avaliação funcional ---
-      const estrelas = document.querySelectorAll('.avaliacao-estrelas span');
-      estrelas.forEach((estrela) => {
-        estrela.addEventListener('click', async () => {
-          const valor = estrela.getAttribute('data-value');
-          estrelas.forEach((s) => {
-            s.classList.toggle('ativo', s.getAttribute('data-value') <= valor);
-          });
+      // Seleção de cores e tamanhos
+      const opcaoBtns = document.querySelectorAll('.opcao-btn');
+      const corHidden = document.getElementById('corHidden');
+      const tamanhoHidden = document.getElementById('tamanhoHidden');
+      opcaoBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          const type = btn.dataset.type;
+          const value = btn.dataset.value;
 
-          try {
-            const resp = await fetch(`/produtos/${#{produto.id}}/avaliar`, {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ nota: valor })
-            });
-            if (resp.ok) {
-              const data = await resp.json();
-              const mediaEl = document.querySelector('.media-avaliacao');
-              if (mediaEl) mediaEl.textContent = `Média: ${data.media.toFixed(1)} / 5`;
-            }
-          } catch (err) {
-            console.error('Erro ao avaliar:', err);
-          }
+          // Remove seleção anterior do mesmo tipo
+          opcaoBtns.forEach(b => { if(b.dataset.type === type) b.classList.remove('selected'); });
+          btn.classList.add('selected');
+
+          if(type === 'cor') corHidden.value = value;
+          else if(type === 'tamanho') tamanhoHidden.value = value;
         });
       });

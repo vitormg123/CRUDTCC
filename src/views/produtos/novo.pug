@@ -99,6 +99,20 @@ html(lang="pt-br")
         background: #e6661a;
       }
 
+      /* Estilo para centralizar Cores e Tamanhos lado a lado */
+      .form-row {
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+        margin-top: 10px;
+      }
+
+      .form-group {
+        flex: 0 0 48%; /* largura dos selects */
+        display: flex;
+        flex-direction: column;
+      }
+
   body
     .page-container
       .form-container
@@ -121,8 +135,62 @@ html(lang="pt-br")
           label Desconto (%):
           input(type="number", step="0.01", name="desconto", value=desconto || '')
 
-          label(for="tamanho") Tamanho:
-          input(type="text", id="tamanho", name="tamanho", placeholder="Ex: 37, 38, 39...", required, value=tamanho || '')
+          //- Cores e Tamanhos lado a lado
+          .form-row
+            .form-group
+              label Cores:
+              select(name="cores[]" multiple required, size=6)
+                option(value="Preto") Preto
+                option(value="Marrom escuro") Marrom escuro
+                option(value="Marrom claro") Marrom claro
+                option(value="Caramelo") Caramelo
+                option(value="Café") Café
+                option(value="Areia") Areia
+                option(value="Bordô") Bordô
+                option(value="Cinza") Cinza
+                option(value="Vermelho") Vermelho
+                option(value="Azul marinho") Azul marinho
+                option(value="Verde musgo") Verde musgo
+                option(value="Verde oliva") Verde oliva
+                option(value="Bege") Bege
+                option(value="Mostarda") Mostarda
+                option(value="Laranja queimado") Laranja queimado
+                option(value="Vinho") Vinho
+                option(value="Roxo escuro") Roxo escuro
+                option(value="Cinza claro") Cinza claro
+                option(value="Creme") Creme
+                option(value="Chocolate") Chocolate
+                option(value="Tan") Tan
+                option(value="Terracota") Terracota
+
+            .form-group
+              label Tamanhos:
+              select(name="tamanhos[]" multiple required, size=6)
+                option(value="33") 33
+                option(value="34") 34
+                option(value="35") 35
+                option(value="36") 36
+                option(value="36.5") 36.5
+                option(value="37") 37
+                option(value="37.5") 37.5
+                option(value="38") 38
+                option(value="38.5") 38.5
+                option(value="39") 39
+                option(value="39.5") 39.5
+                option(value="40") 40
+                option(value="40.5") 40.5
+                option(value="41") 41
+                option(value="41.5") 41.5
+                option(value="42") 42
+                option(value="42.5") 42.5
+                option(value="43") 43
+                option(value="43.5") 43.5
+                option(value="44") 44
+                option(value="44.5") 44.5
+                option(value="45") 45
+                option(value="46") 46
+                option(value="47") 47
+                option(value="48") 48
 
           label Categoria:
           select(name="categoriaId", required)

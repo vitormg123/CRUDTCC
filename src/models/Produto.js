@@ -8,9 +8,11 @@ const Produto = sequelize.define('Produto', {
   descricao: { type: DataTypes.TEXT, allowNull: false },
   preco: { type: DataTypes.FLOAT, allowNull: false },
   desconto: { type: DataTypes.FLOAT, defaultValue: 0 },
-  tamanho: { type: DataTypes.STRING, allowNull: false },
-  imagem: { type: DataTypes.STRING }, // ainda pode existir, mas não usado no cadastro múltiplo
-  imagens: { type: DataTypes.TEXT },  // nova coluna para salvar array de imagens em JSON
+  tamanho: { type: DataTypes.STRING }, // para compatibilidade antiga, mas agora usamos tamanhos múltiplos
+  cores: { type: DataTypes.TEXT },      // nova coluna para salvar array de cores em JSON
+  tamanhos: { type: DataTypes.TEXT },   // nova coluna para salvar array de tamanhos em JSON
+  imagem: { type: DataTypes.STRING },   // ainda pode existir, mas não usado no cadastro múltiplo
+  imagens: { type: DataTypes.TEXT },    // coluna para salvar array de imagens em JSON
   criadoEm: { type: DataTypes.DATE, defaultValue: DataTypes.NOW },
   quantidadeVendida: { type: DataTypes.INTEGER, defaultValue: 0 }
 });

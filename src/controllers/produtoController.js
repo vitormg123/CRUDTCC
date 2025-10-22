@@ -4,7 +4,9 @@ const { Op } = require('sequelize');
 const parseImagens = (produtosRaw) => {
   return produtosRaw.map(p => {
     const imgs = p.imagens ? JSON.parse(p.imagens) : [];
-    return { ...p.toJSON(), imagens: imgs };
+    const cores = p.cores ? JSON.parse(p.cores) : [];
+    const tamanhos = p.tamanhos ? JSON.parse(p.tamanhos) : [];
+    return { ...p.toJSON(), imagens: imgs, cores, tamanhos };
   });
 };
 
@@ -31,19 +33,17 @@ exports.formNovoProduto = async (req, res) => {
   }
 };
 
+// Criar produto
 exports.criarProduto = async (req, res) => {
   try {
-    const { nome, descricao, preco, desconto, categoriaId, tamanho } = req.body;
+    const { nome, descricao, preco, desconto, categoriaId, cores, tamanhos } = req.body;
     const categorias = await Categoria.findAll();
 
     // Pega apenas arquivos válidos
     const imagens = req.files
-      ? req.files
-          .filter(f => f.filename) // só arquivos que passaram no fileFilter
-          .map(f => '/uploads/' + f.filename)
+      ? req.files.filter(f => f.filename).map(f => '/uploads/' + f.filename)
       : [];
 
-    // Se não houver imagens válidas, retorna alert
     if (imagens.length === 0) {
       return res.render('produtos/novo', {
         categorias,
@@ -52,19 +52,22 @@ exports.criarProduto = async (req, res) => {
         descricao,
         preco,
         desconto,
-        tamanho,
+        cores,
+        tamanhos,
         categoriaId
       });
     }
 
-    // Criação do produto
     await Produto.create({
       nome,
       descricao,
       preco,
       desconto: desconto || 0,
       categoriaId,
-      tamanho,
+      cores: JSON.stringify(cores || []),
+      tamanhos: JSON.stringify(tamanhos || []),
+      // para compatibilidade com antigo campo tamanho, usamos o primeiro do array ou null
+      tamanho: tamanhos && tamanhos.length > 0 ? tamanhos[0] : null,
       imagens: JSON.stringify(imagens)
     });
 
@@ -75,7 +78,6 @@ exports.criarProduto = async (req, res) => {
     res.status(500).send('Erro ao cadastrar produto');
   }
 };
-
 
 // Formulário editar produto
 exports.formEditarProduto = async (req, res) => {
@@ -92,10 +94,19 @@ exports.formEditarProduto = async (req, res) => {
 // Editar produto
 exports.editarProduto = async (req, res) => {
   try {
-    const { nome, descricao, preco, desconto, categoriaId, tamanho } = req.body;
+    const { nome, descricao, preco, desconto, categoriaId, cores, tamanhos } = req.body;
     const imagens = req.files ? req.files.map(file => '/uploads/' + file.filename) : [];
 
-    const updateData = { nome, descricao, preco, desconto: desconto || 0, categoriaId, tamanho };
+    const updateData = {
+      nome,
+      descricao,
+      preco,
+      desconto: desconto || 0,
+      categoriaId,
+      cores: JSON.stringify(cores || []),
+      tamanhos: JSON.stringify(tamanhos || []),
+      tamanho: tamanhos && tamanhos.length > 0 ? tamanhos[0] : null
+    };
     if (imagens.length > 0) updateData.imagens = JSON.stringify(imagens);
 
     await Produto.update(updateData, { where: { id: req.params.id } });
@@ -208,7 +219,10 @@ exports.verDetalhesProduto = async (req, res) => {
     if (!produto) return res.status(404).send("Produto não encontrado");
 
     const imagens = produto.imagens ? JSON.parse(produto.imagens) : [];
-    res.render('produtoDetalhes', { produto, imagens, usuario: req.session });
+    const cores = produto.cores ? JSON.parse(produto.cores) : [];
+    const tamanhos = produto.tamanhos ? JSON.parse(produto.tamanhos) : [];
+
+    res.render('produtoDetalhes', { produto, imagens, cores, tamanhos, usuario: req.session });
   } catch (err) {
     console.error(err);
     res.status(500).send("Erro ao buscar produto");
