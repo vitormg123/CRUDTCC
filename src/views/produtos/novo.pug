@@ -99,7 +99,6 @@ html(lang="pt-br")
         background: #e6661a;
       }
 
-      /* Estilo para centralizar Cores e Tamanhos lado a lado */
       .form-row {
         display: flex;
         justify-content: center;
@@ -108,7 +107,7 @@ html(lang="pt-br")
       }
 
       .form-group {
-        flex: 0 0 48%; /* largura dos selects */
+        flex: 0 0 48%;
         display: flex;
         flex-direction: column;
       }
@@ -135,7 +134,6 @@ html(lang="pt-br")
           label Desconto (%):
           input(type="number", step="0.01", name="desconto", value=desconto || '')
 
-          //- Cores e Tamanhos lado a lado
           .form-row
             .form-group
               label Cores:
@@ -199,6 +197,10 @@ html(lang="pt-br")
                 option(value=categoria.id, selected)= categoria.nome
               else
                 option(value=categoria.id)= categoria.nome
+
+          // 👇 NOVO CAMPO: Quantidade de pares
+          label Quantidade de pares disponíveis:
+          input(type="number", name="quantidadePares", min="1", required)
 
           label Imagens do Produto (até 10):
           input(type="file", name="imagens", accept="image/*", multiple)

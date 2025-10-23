@@ -36,10 +36,9 @@ exports.formNovoProduto = async (req, res) => {
 // Criar produto
 exports.criarProduto = async (req, res) => {
   try {
-    const { nome, descricao, preco, desconto, categoriaId, cores, tamanhos } = req.body;
+    const { nome, descricao, preco, desconto, categoriaId, cores, tamanhos, quantidadePares } = req.body;
     const categorias = await Categoria.findAll();
 
-    // Pega apenas arquivos válidos
     const imagens = req.files
       ? req.files.filter(f => f.filename).map(f => '/uploads/' + f.filename)
       : [];
@@ -54,7 +53,8 @@ exports.criarProduto = async (req, res) => {
         desconto,
         cores,
         tamanhos,
-        categoriaId
+        categoriaId,
+        quantidadePares
       });
     }
 
@@ -66,7 +66,7 @@ exports.criarProduto = async (req, res) => {
       categoriaId,
       cores: JSON.stringify(cores || []),
       tamanhos: JSON.stringify(tamanhos || []),
-      // para compatibilidade com antigo campo tamanho, usamos o primeiro do array ou null
+      quantidadePares: quantidadePares || 1,
       tamanho: tamanhos && tamanhos.length > 0 ? tamanhos[0] : null,
       imagens: JSON.stringify(imagens)
     });
@@ -94,7 +94,7 @@ exports.formEditarProduto = async (req, res) => {
 // Editar produto
 exports.editarProduto = async (req, res) => {
   try {
-    const { nome, descricao, preco, desconto, categoriaId, cores, tamanhos } = req.body;
+    const { nome, descricao, preco, desconto, categoriaId, cores, tamanhos, quantidadePares } = req.body;
     const imagens = req.files ? req.files.map(file => '/uploads/' + file.filename) : [];
 
     const updateData = {
@@ -105,6 +105,7 @@ exports.editarProduto = async (req, res) => {
       categoriaId,
       cores: JSON.stringify(cores || []),
       tamanhos: JSON.stringify(tamanhos || []),
+      quantidadePares: quantidadePares || 1,
       tamanho: tamanhos && tamanhos.length > 0 ? tamanhos[0] : null
     };
     if (imagens.length > 0) updateData.imagens = JSON.stringify(imagens);

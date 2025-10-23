@@ -64,6 +64,9 @@ html(lang="pt-br")
           label Desconto (%):
           input(type="number", step="0.01", name="desconto", value=produto.desconto)
 
+          label Estoque (quantidade de pares):
+          input(type="number", name="quantidadePares", required, min="0", value=produto.quantidadePares)
+
           //- Seleção de cores
           - const cores = produto.cores ? JSON.parse(produto.cores) : [];
           label Cores disponíveis:
@@ -90,7 +93,6 @@ html(lang="pt-br")
           label Imagens do Produto (até 10):
           input(type="file", name="imagens", accept="image/*", multiple)
 
-          //- Container com botões lado a lado
           .botoes-container
             button(type="button", class="btn-laranja", onclick="window.location.href='/'") Voltar
             button(type="submit", class="btn-laranja") Salvar

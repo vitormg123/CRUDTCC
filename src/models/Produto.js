@@ -14,7 +14,8 @@ const Produto = sequelize.define('Produto', {
   imagem: { type: DataTypes.STRING },   // ainda pode existir, mas não usado no cadastro múltiplo
   imagens: { type: DataTypes.TEXT },    // coluna para salvar array de imagens em JSON
   criadoEm: { type: DataTypes.DATE, defaultValue: DataTypes.NOW },
-  quantidadeVendida: { type: DataTypes.INTEGER, defaultValue: 0 }
+  quantidadeVendida: { type: DataTypes.INTEGER, defaultValue: 0 },
+  quantidadePares: { type: DataTypes.INTEGER, defaultValue: 1 }
 });
 
 // Relacionamento com Categoria usando alias

@@ -151,8 +151,11 @@ html(lang="pt-br")
             p.preco R$ #{produto.preco.toFixed(2)}
             if produto.desconto > 0
               p.desconto Desconto: #{produto.desconto} %
-            if produto.Categoria
-              p Categoria: #{produto.Categoria.nome}
+            if produto.Categorium
+              p Categoria: #{produto.Categorium.nome}
+
+            //- Estoque disponível
+            p Estoque disponível: #{produto.quantidadePares} par#{produto.quantidadePares > 1 ? 'es' : ''}
 
             //- Seleção de cores
             - const cores = produto.cores ? JSON.parse(produto.cores) : [];
@@ -170,9 +173,11 @@ html(lang="pt-br")
                 each tam in tamanhos
                   button(type="button", class="opcao-btn", data-type="tamanho", data-value=tam)= tam
 
+            //- Quantidade com limite
             .quantidade-wrapper
               label(for="quantidadeInput") Quantidade:
-              input#quantidadeInput(type="number", name="quantidade", value="1", min="1", max="100")
+              - const maxQuantidade = produto.quantidadePares || 1;
+              input#quantidadeInput(type="number", name="quantidade", value="1", min="1", max=maxQuantidade)
 
             .btn-carrinho-wrapper
               if usuario
@@ -202,7 +207,10 @@ html(lang="pt-br")
       // Quantidade dinâmica
       const qInput = document.getElementById('quantidadeInput');
       const qHidden = document.getElementById('quantidadeHidden');
-      if (qInput && qHidden) qInput.addEventListener('input', () => qHidden.value = qInput.value);
+      if (qInput && qHidden) qInput.addEventListener('input', () => {
+        if(parseInt(qInput.value) > parseInt(qInput.max)) qInput.value = qInput.max;
+        qHidden.value = qInput.value;
+      });
 
       // Seleção de cores e tamanhos
       const opcaoBtns = document.querySelectorAll('.opcao-btn');
@@ -213,7 +221,6 @@ html(lang="pt-br")
           const type = btn.dataset.type;
           const value = btn.dataset.value;
 
-          // Remove seleção anterior do mesmo tipo
           opcaoBtns.forEach(b => { if(b.dataset.type === type) b.classList.remove('selected'); });
           btn.classList.add('selected');
 
