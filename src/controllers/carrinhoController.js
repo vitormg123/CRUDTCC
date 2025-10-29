@@ -1,4 +1,12 @@
 const { Produto } = require('../models');
+const mercadopago = require('mercadopago');
+
+// Configuração do Mercado Pago
+mercadopago.config = {
+  access_token: 'aluno01'
+};
+
+
 
 // Adiciona produto ao carrinho
 exports.adicionarAoCarrinho = async (req, res) => {
@@ -69,25 +77,70 @@ exports.removerTudoDoCarrinho = (req, res) => {
   res.redirect('/carrinho');
 };
 
-// Finalizar compra
+// Finalizar compra com Mercado Pago
 exports.finalizarCompra = async (req, res) => {
-  const carrinho = req.session.carrinho || [];
-  if (carrinho.length === 0) return res.redirect('/carrinho');
+  try {
+    const carrinho = req.session.carrinho || [];
+    if (carrinho.length === 0) return res.redirect('/carrinho');
 
-  for (const item of carrinho) {
-    const produto = await Produto.findByPk(item.produtoId);
-    if (produto) {
-      produto.quantidadeVendida += item.quantidade;
-      await produto.save();
+    // Atualiza quantidadeVendida
+    for (const item of carrinho) {
+      const produto = await Produto.findByPk(item.produtoId);
+      if (produto) {
+        produto.quantidadeVendida += item.quantidade;
+        await produto.save();
+      }
     }
-  }
 
-  req.session.carrinho = [];
-  res.render('carrinho', { itens: [], total: 0, mensagem: 'Compra finalizada com sucesso!' });
+    // Prepara itens para Mercado Pago
+    const items = await Promise.all(carrinho.map(async item => {
+      const produto = await Produto.findByPk(item.produtoId);
+      return {
+        title: produto.nome,
+        quantity: item.quantidade,
+        currency_id: 'BRL',
+        unit_price: parseFloat((produto.preco * (1 - produto.desconto / 100)).toFixed(2))
+      };
+    }));
+
+    // Cria preferência de pagamento
+    const preference = {
+      items,
+      back_urls: {
+        success: 'http://localhost:3000/carrinho/sucesso',
+        failure: 'http://localhost:3000/carrinho/falha',
+        pending: 'http://localhost:3000/carrinho/pendente'
+      },
+      auto_return: 'approved'
+    };
+
+    const response = await mercadopago.preferences.create(preference);
+
+    // Redireciona para checkout do Mercado Pago
+    res.redirect(response.body.init_point);
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Erro ao finalizar a compra.');
+  }
 };
 
 // Zerar todo o carrinho
 exports.zerarCarrinho = (req, res) => {
   req.session.carrinho = [];
   res.redirect('/carrinho');
+};
+
+// Rotas de retorno do Mercado Pago
+exports.sucesso = (req, res) => {
+  req.session.carrinho = [];
+  res.send('Pagamento aprovado! Obrigado pela compra.');
+};
+
+exports.falha = (req, res) => {
+  res.send('O pagamento falhou. Tente novamente.');
+};
+
+exports.pendente = (req, res) => {
+  res.send('O pagamento está pendente.');
 };

@@ -9,4 +9,9 @@ router.post('/removerTudo/:produtoId', carrinhoController.removerTudoDoCarrinho)
 router.post('/finalizar', carrinhoController.finalizarCompra);
 router.post('/zerar', carrinhoController.zerarCarrinho);
 
+// Rotas de retorno do Mercado Pago
+router.get('/sucesso', carrinhoController.sucesso);
+router.get('/falha', carrinhoController.falha);
+router.get('/pendente', carrinhoController.pendente);
+
 module.exports = router;
